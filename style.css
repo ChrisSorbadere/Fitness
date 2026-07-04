@@ -168,7 +168,7 @@ main{
 }
 .card ul{margin:6px 0 0; padding-left:18px; font-size:13px; line-height:1.5; color:#3E5D5A;}
 
-/* --- DOUBLE GRILLE ALGORITHMIQUE POUR LES 4 BANDES THÉMATIQUES --- */
+/* --- CALIBRAGE ET COMPENSATION DES MARGES DE LA PLANCHE --- */
 .exercise-illustration {
   width: 100%;
   background-repeat: no-repeat;
@@ -177,59 +177,59 @@ main{
   border: 1px solid var(--line);
 }
 
-/* Ligne 1 : Mobilité (6 colonnes horizontales) -> Fichier : theme_mobilite.png */
+/* Ligne 1 : Mobilité (6 colonnes) -> theme_mobilite.png */
 .img-01, .img-02, .img-03, .img-04, .img-05, .img-06 { 
   background-image: url('theme_mobilite.png');
-  background-size: 600% 100%; 
-  aspect-ratio: 1.25;
-  background-position-y: center;
-}
-.img-01 { background-position-x: 0%; }
-.img-02 { background-position-x: 20%; }
-.img-03 { background-position-x: 40%; }
-.img-04 { background-position-x: 60%; }
-.img-05 { background-position-x: 80%; }
-.img-06 { background-position-x: 100%; }
-
-/* Ligne 2 : Renforcement (7 colonnes horizontales) -> Fichier : theme_renforcement.png */
-.img-07, .img-08, .img-09, .img-10, .img-11, .img-12, .img-13 { 
-  background-image: url('theme_renforcement.png');
-  background-size: 700% 100%; 
-  aspect-ratio: 1.15;
-  background-position-y: center;
-}
-.img-07 { background-position-x: 0%; }
-.img-08 { background-position-x: 16.666%; }
-.img-09 { background-position-x: 33.333%; }
-.img-10 { background-position-x: 50%; }
-.img-11 { background-position-x: 66.666%; }
-.img-12 { background-position-x: 83.333%; }
-.img-13 { background-position-x: 100%; }
-
-/* Ligne 3 : Maison & Cardio (7 colonnes horizontales) -> Fichier : theme_maison_cardio.png */
-.img-14, .img-15, .img-16, .img-17, .img-18, .img-19, .img-20 { 
-  background-image: url('theme_maison_cardio.png');
-  background-size: 700% 100%; 
-  aspect-ratio: 1.15;
-  background-position-y: center;
-}
-.img-14 { background-position-x: 0%; }
-.img-15 { background-position-x: 16.666%; }
-.img-16 { background-position-x: 33.333%; }
-.img-17 { background-position-x: 50%; }
-.img-18 { background-position-x: 66.666%; }
-.img-19 { background-position-x: 83.333%; }
-.img-20 { background-position-x: 100%; }
-
-/* Ligne 4 : Repères (2 colonnes horizontales isolées) -> Fichier : _theme_reperes.png */
-.img-sommeil, .img-respiration { 
-  background-image: url('_theme_reperes.png');
-  background-size: 200% 100%; 
+  background-size: 615% 100%; 
   aspect-ratio: 1.35;
   background-position-y: center;
 }
-.img-sommeil { background-position-x: 0%; }
-.img-respiration { background-position-x: 100%; }
+.img-01 { background-position-x: 1.0%; }
+.img-02 { background-position-x: 20.8%; }
+.img-03 { background-position-x: 40.6%; }
+.img-04 { background-position-x: 60.4%; }
+.img-05 { background-position-x: 80.2%; }
+.img-06 { background-position-x: 99.0%; }
+
+/* Ligne 2 : Renforcement (7 colonnes) -> theme_renforcement.png */
+.img-07, .img-08, .img-09, .img-10, .img-11, .img-12, .img-13 { 
+  background-image: url('theme_renforcement.png');
+  background-size: 718% 100%; 
+  aspect-ratio: 1.35;
+  background-position-y: center;
+}
+.img-07 { background-position-x: 1.0%; }
+.img-08 { background-position-x: 17.5%; }
+.img-09 { background-position-x: 34.0%; }
+.img-10 { background-position-x: 50.5%; }
+.img-11 { background-position-x: 67.0%; }
+.img-12 { background-position-x: 83.5%; }
+.img-13 { background-position-x: 99.0%; }
+
+/* Ligne 3 : Maison & Cardio (7 colonnes) -> theme_maison_cardio.png */
+.img-14, .img-15, .img-16, .img-17, .img-18, .img-19, .img-20 { 
+  background-image: url('theme_maison_cardio.png');
+  background-size: 718% 100%; 
+  aspect-ratio: 1.35;
+  background-position-y: center;
+}
+.img-14 { background-position-x: 1.0%; }
+.img-15 { background-position-x: 17.5%; }
+.img-16 { background-position-x: 34.0%; }
+.img-17 { background-position-x: 50.5%; }
+.img-18 { background-position-x: 67.0%; }
+.img-19 { background-position-x: 83.5%; }
+.img-20 { background-position-x: 99.0%; }
+
+/* Ligne 4 : Repères (Structure identique à 7 colonnes basée sur le fichier réel) -> _theme_reperes.png */
+.img-sommeil, .img-respiration { 
+  background-image: url('_theme_reperes.png');
+  background-size: 718% 100%; 
+  aspect-ratio: 1.35;
+  background-position-y: center;
+}
+.img-sommeil { background-position-x: 1.0%; }
+.img-respiration { background-position-x: 17.5%; }
 /* ------------------------------------------------------------- */
 
 .block-title{
