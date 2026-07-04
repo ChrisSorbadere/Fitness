@@ -117,14 +117,11 @@ const POSES = {
     <line x1="32" y1="38" x2="40" y2="46"/><line x1="40" y1="46" x2="36" y2="54"/>
   `),
   row: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="40"/>
-    <line x1="32" y1="22" x2="18" y2="25"/><line x1="18" y1="25" x2="27" y2="30"/>
-    <line x1="32" y1="22" x2="46" y2="25"/><line x1="46" y1="25" x2="37" y2="30"/>
-    <line x1="27" y1="30" x2="32" y2="52" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="2 4"/>
-    <line x1="37" y1="30" x2="32" y2="52" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="2 4"/>
-    <line x1="32" y1="40" x2="25" y2="58"/>
-    <line x1="32" y1="40" x2="39" y2="58"/>
+    <circle cx="46" cy="11" r="6"/>
+    <line x1="46" y1="17" x2="46" y2="38"/>
+    <line x1="46" y1="38" x2="28" y2="41"/><line x1="28" y1="41" x2="14" y2="43"/>
+    <line x1="46" y1="21" x2="32" y2="29"/><line x1="32" y1="29" x2="17" y2="40"/>
+    <circle cx="14" cy="43" r="3.5" stroke="${ACCENT}" stroke-width="3"/>
   `),
   sleep: svg(`<path d="M40 14 A18 18 0 1 0 46 46 A13 13 0 0 1 40 14 Z" fill="${STROKE}" stroke="none"/>`),
   breathe: svg(`<circle cx="32" cy="32" r="14" stroke-dasharray="4 5"/><circle cx="32" cy="32" r="4" fill="${ACCENT}" stroke="none"/>`),
