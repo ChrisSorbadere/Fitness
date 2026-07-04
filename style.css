@@ -177,9 +177,9 @@ main{
   border: 1px solid var(--line);
 }
 
-/* Ligne 1 : Mobilité (6 colonnes horizontales) -> Image 1000178398.jpg */
+/* Ligne 1 : Mobilité (6 colonnes horizontales) -> Fichier : theme_mobilite.png */
 .img-01, .img-02, .img-03, .img-04, .img-05, .img-06 { 
-  background-image: url('1000178398.jpg');
+  background-image: url('theme_mobilite.png');
   background-size: 600% 100%; 
   aspect-ratio: 1.25;
   background-position-y: center;
@@ -191,9 +191,9 @@ main{
 .img-05 { background-position-x: 80%; }
 .img-06 { background-position-x: 100%; }
 
-/* Ligne 2 : Renforcement (7 colonnes horizontales) -> Image 1000178399.jpg */
+/* Ligne 2 : Renforcement (7 colonnes horizontales) -> Fichier : theme_renforcement.png */
 .img-07, .img-08, .img-09, .img-10, .img-11, .img-12, .img-13 { 
-  background-image: url('1000178399.jpg');
+  background-image: url('theme_renforcement.png');
   background-size: 700% 100%; 
   aspect-ratio: 1.15;
   background-position-y: center;
@@ -206,9 +206,9 @@ main{
 .img-12 { background-position-x: 83.333%; }
 .img-13 { background-position-x: 100%; }
 
-/* Ligne 3 : Maison & Cardio (7 colonnes horizontales) -> Image 1000178400.jpg */
+/* Ligne 3 : Maison & Cardio (7 colonnes horizontales) -> Fichier : theme_maison_cardio.png */
 .img-14, .img-15, .img-16, .img-17, .img-18, .img-19, .img-20 { 
-  background-image: url('1000178400.jpg');
+  background-image: url('theme_maison_cardio.png');
   background-size: 700% 100%; 
   aspect-ratio: 1.15;
   background-position-y: center;
@@ -221,9 +221,9 @@ main{
 .img-19 { background-position-x: 83.333%; }
 .img-20 { background-position-x: 100%; }
 
-/* Ligne 4 : Repères (2 colonnes horizontales isolées) -> Image 1000178401.jpg */
+/* Ligne 4 : Repères (2 colonnes horizontales isolées) -> Fichier : _theme_reperes.png */
 .img-sommeil, .img-respiration { 
-  background-image: url('1000178401.jpg');
+  background-image: url('_theme_reperes.png');
   background-size: 200% 100%; 
   aspect-ratio: 1.35;
   background-position-y: center;
