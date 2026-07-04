@@ -1,312 +1,3 @@
-// ---------- Illustrations (SVG originales, style pictogramme) ----------
-const STROKE = '#103E45';
-const ACCENT = '#FD9C29';
-function svg(inner){
-  return `<svg viewBox="0 0 64 64" width="70%" height="70%" fill="none" stroke="${STROKE}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
-}
-const POSES = {
-  neck: svg(`
-    <circle cx="32" cy="13" r="6"/>
-    <line x1="32" y1="19" x2="32" y2="40"/>
-    <line x1="32" y1="23" x2="21" y2="35"/>
-    <line x1="32" y1="23" x2="43" y2="35"/>
-    <line x1="32" y1="40" x2="24" y2="58"/>
-    <line x1="32" y1="40" x2="40" y2="58"/>
-    <path d="M18 9 Q10 13 14 21" stroke="${ACCENT}" stroke-width="3"/>
-    <path d="M14 21 l-4 -2 l1.5 4" stroke="${ACCENT}" stroke-width="3"/>
-    <path d="M46 9 Q54 13 50 21" stroke="${ACCENT}" stroke-width="3"/>
-    <path d="M50 21 l4 -2 l-1.5 4" stroke="${ACCENT}" stroke-width="3"/>
-  `),
-  catcow_a: svg(`
-    <circle cx="12" cy="24" r="5"/>
-    <path d="M17,27 Q32,13 47,27"/>
-    <line x1="19" y1="28" x2="19" y2="52"/>
-    <line x1="45" y1="28" x2="45" y2="52"/>
-    <line x1="27" y1="24" x2="27" y2="52"/>
-    <line x1="37" y1="24" x2="37" y2="52"/>
-  `),
-  catcow_b: svg(`
-    <circle cx="12" cy="32" r="5"/>
-    <path d="M17,29 Q32,41 47,29"/>
-    <line x1="19" y1="31" x2="19" y2="54"/>
-    <line x1="45" y1="31" x2="45" y2="54"/>
-    <line x1="27" y1="30" x2="27" y2="54"/>
-    <line x1="37" y1="30" x2="37" y2="54"/>
-  `),
-  shoulders_a: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="40"/>
-    <line x1="32" y1="22" x2="16" y2="10"/>
-    <line x1="32" y1="22" x2="48" y2="10"/>
-    <line x1="32" y1="40" x2="25" y2="58"/>
-    <line x1="32" y1="40" x2="39" y2="58"/>
-  `),
-  shoulders_b: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="40"/>
-    <line x1="44" y1="20" x2="16" y2="24"/>
-    <line x1="20" y1="28" x2="16" y2="24"/>
-    <line x1="32" y1="40" x2="25" y2="58"/>
-    <line x1="32" y1="40" x2="39" y2="58"/>
-  `),
-  hips: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="38"/>
-    <line x1="32" y1="20" x2="20" y2="24"/><line x1="20" y1="24" x2="27" y2="33"/>
-    <line x1="32" y1="20" x2="44" y2="24"/><line x1="44" y1="24" x2="37" y2="33"/>
-    <line x1="32" y1="38" x2="25" y2="58"/>
-    <line x1="32" y1="38" x2="39" y2="58"/>
-    <ellipse cx="32" cy="42" rx="13" ry="6" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="3 4"/>
-  `),
-  ankle_a: svg(`
-    <circle cx="14" cy="14" r="6"/>
-    <line x1="16" y1="20" x2="22" y2="32"/>
-    <line x1="22" y1="32" x2="42" y2="32"/>
-    <line x1="42" y1="32" x2="52" y2="34"/>
-    <line x1="18" y1="24" x2="10" y2="30"/>
-    <path d="M50 26 A6 6 0 1 1 50 34" stroke="${ACCENT}" stroke-width="3"/>
-  `),
-  ankle_b: svg(`
-    <circle cx="14" cy="12" r="6"/>
-    <line x1="14" y1="18" x2="14" y2="38"/>
-    <line x1="14" y1="21" x2="6" y2="33"/>
-    <line x1="14" y1="21" x2="22" y2="33"/>
-    <line x1="14" y1="38" x2="10" y2="58"/>
-    <line x1="14" y1="38" x2="26" y2="46"/><line x1="26" y1="46" x2="36" y2="53"/>
-    <line x1="50" y1="6" x2="50" y2="60" stroke-width="3"/>
-  `),
-  lunge_a: svg(`
-    <circle cx="30" cy="14" r="6"/>
-    <line x1="30" y1="20" x2="30" y2="32"/>
-    <line x1="30" y1="32" x2="20" y2="46"/><line x1="20" y1="46" x2="16" y2="58"/>
-    <line x1="30" y1="32" x2="46" y2="50"/><line x1="46" y1="50" x2="54" y2="58"/>
-    <line x1="30" y1="20" x2="18" y2="30"/><line x1="18" y1="30" x2="14" y2="40"/>
-    <line x1="30" y1="20" x2="24" y2="32"/><line x1="24" y1="32" x2="20" y2="40"/>
-  `),
-  lunge_b: svg(`
-    <circle cx="30" cy="11" r="6"/>
-    <line x1="30" y1="17" x2="30" y2="34"/>
-    <line x1="30" y1="34" x2="20" y2="46"/><line x1="20" y1="46" x2="16" y2="58"/>
-    <line x1="30" y1="34" x2="46" y2="50"/><line x1="46" y1="50" x2="54" y2="58"/>
-    <line x1="30" y1="18" x2="18" y2="30"/><line x1="18" y1="30" x2="15" y2="42"/>
-    <line x1="30" y1="18" x2="42" y2="8"/><line x1="42" y1="8" x2="50" y2="2"/>
-  `),
-  shoulder_rotation_a: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="40"/>
-    <line x1="32" y1="22" x2="20" y2="30"/>
-    <line x1="20" y1="30" x2="33" y2="27"/>
-    <line x1="32" y1="22" x2="44" y2="36"/>
-    <line x1="32" y1="40" x2="25" y2="58"/>
-    <line x1="32" y1="40" x2="39" y2="58"/>
-  `),
-  shoulder_rotation_b: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="40"/>
-    <line x1="32" y1="22" x2="20" y2="30"/>
-    <line x1="20" y1="30" x2="34" y2="34"/>
-    <line x1="32" y1="22" x2="44" y2="36"/>
-    <line x1="32" y1="40" x2="25" y2="58"/>
-    <line x1="32" y1="40" x2="39" y2="58"/>
-    <line x1="6" y1="34" x2="20" y2="30" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="2 4"/>
-    <path d="M34 34 l5 -2 l-2 5" stroke="${ACCENT}" stroke-width="3"/>
-  `),
-  squat_a: svg(`
-    <circle cx="32" cy="10" r="6"/>
-    <line x1="32" y1="16" x2="32" y2="38"/>
-    <line x1="32" y1="38" x2="26" y2="58"/>
-    <line x1="32" y1="38" x2="38" y2="58"/>
-    <line x1="32" y1="20" x2="26" y2="26"/>
-    <line x1="32" y1="20" x2="38" y2="26"/>
-    <circle cx="32" cy="27" r="4" fill="${ACCENT}" stroke="none"/>
-  `),
-  squat_b: svg(`
-    <circle cx="32" cy="10" r="6"/>
-    <line x1="32" y1="16" x2="32" y2="32"/>
-    <line x1="32" y1="32" x2="18" y2="40"/><line x1="18" y1="40" x2="15" y2="58"/>
-    <line x1="32" y1="32" x2="46" y2="40"/><line x1="46" y1="40" x2="49" y2="58"/>
-    <line x1="32" y1="20" x2="26" y2="26"/>
-    <line x1="32" y1="20" x2="38" y2="26"/>
-    <circle cx="32" cy="27" r="4" fill="${ACCENT}" stroke="none"/>
-  `),
-  rdl_a: svg(`
-    <circle cx="32" cy="10" r="6"/>
-    <line x1="32" y1="16" x2="32" y2="38"/>
-    <line x1="32" y1="38" x2="26" y2="58"/>
-    <line x1="32" y1="38" x2="38" y2="58"/>
-    <line x1="32" y1="20" x2="28" y2="40"/><circle cx="28" cy="42" r="4" fill="${ACCENT}" stroke="none"/>
-    <line x1="32" y1="20" x2="36" y2="40"/><circle cx="36" cy="42" r="4" fill="${ACCENT}" stroke="none"/>
-  `),
-  rdl_b: svg(`
-    <circle cx="15" cy="17" r="6"/>
-    <line x1="17" y1="22" x2="40" y2="42"/>
-    <line x1="40" y1="42" x2="36" y2="58"/>
-    <line x1="40" y1="42" x2="46" y2="58"/>
-    <line x1="20" y1="27" x2="18" y2="48"/>
-    <line x1="24" y1="29" x2="22" y2="48"/>
-    <circle cx="18" cy="50" r="4" fill="${ACCENT}" stroke="none"/>
-    <circle cx="22" cy="50" r="4" fill="${ACCENT}" stroke="none"/>
-  `),
-  plank: svg(`
-    <circle cx="10" cy="32" r="5"/>
-    <line x1="15" y1="32" x2="48" y2="32"/>
-    <line x1="15" y1="32" x2="15" y2="46"/>
-    <line x1="10" y1="46" x2="20" y2="46"/>
-    <line x1="48" y1="32" x2="55" y2="42"/>
-    <line x1="6" y1="48" x2="58" y2="48" stroke="#B9D4CF" stroke-width="2" stroke-dasharray="2 3"/>
-  `),
-  birddog_a: svg(`
-    <circle cx="12" cy="26" r="5"/>
-    <line x1="17" y1="28" x2="47" y2="28"/>
-    <line x1="19" y1="29" x2="19" y2="52"/>
-    <line x1="45" y1="29" x2="45" y2="52"/>
-    <line x1="27" y1="28" x2="27" y2="52"/>
-    <line x1="37" y1="28" x2="37" y2="52"/>
-  `),
-  birddog_b: svg(`
-    <circle cx="12" cy="28" r="5"/>
-    <line x1="17" y1="30" x2="40" y2="30"/>
-    <line x1="20" y1="30" x2="20" y2="50"/>
-    <line x1="38" y1="30" x2="38" y2="50"/>
-    <line x1="17" y1="30" x2="6" y2="18"/>
-    <line x1="40" y1="30" x2="54" y2="42"/>
-  `),
-  balance_a: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="38"/>
-    <line x1="32" y1="22" x2="20" y2="26"/>
-    <line x1="32" y1="22" x2="44" y2="26"/>
-    <line x1="32" y1="38" x2="26" y2="58"/>
-    <line x1="32" y1="38" x2="38" y2="58"/>
-  `),
-  balance_b: svg(`
-    <circle cx="32" cy="12" r="6"/>
-    <line x1="32" y1="18" x2="32" y2="38"/>
-    <line x1="32" y1="22" x2="18" y2="17"/>
-    <line x1="32" y1="22" x2="46" y2="17"/>
-    <line x1="32" y1="38" x2="30" y2="58"/>
-    <line x1="32" y1="38" x2="40" y2="46"/><line x1="40" y1="46" x2="36" y2="54"/>
-  `),
-  row_a: svg(`
-    <circle cx="46" cy="11" r="6"/>
-    <line x1="46" y1="17" x2="46" y2="38"/>
-    <line x1="46" y1="38" x2="28" y2="41"/><line x1="28" y1="41" x2="14" y2="43"/>
-    <line x1="46" y1="21" x2="30" y2="32"/><line x1="30" y1="32" x2="15" y2="41"/>
-    <circle cx="14" cy="43" r="3.5" stroke="${ACCENT}" stroke-width="3"/>
-  `),
-  row_b: svg(`
-    <circle cx="46" cy="11" r="6"/>
-    <line x1="46" y1="17" x2="46" y2="38"/>
-    <line x1="46" y1="38" x2="28" y2="41"/><line x1="28" y1="41" x2="14" y2="43"/>
-    <line x1="46" y1="24" x2="38" y2="26"/><line x1="38" y1="26" x2="46" y2="30"/>
-    <line x1="46" y1="30" x2="14" y2="43" stroke="${ACCENT}" stroke-width="2.5" stroke-dasharray="2 4"/>
-    <circle cx="14" cy="43" r="3.5" stroke="${ACCENT}" stroke-width="3"/>
-  `),
-  sleep: svg(`<path d="M40 14 A18 18 0 1 0 46 46 A13 13 0 0 1 40 14 Z" fill="${STROKE}" stroke="none"/>`),
-  breathe: svg(`<circle cx="32" cy="32" r="14" stroke-dasharray="4 5"/><circle cx="32" cy="32" r="4" fill="${ACCENT}" stroke="none"/>`),
-  check: svg(`<rect x="14" y="14" width="36" height="36" rx="6"/><path d="M22 32 l8 8 l14 -16" stroke="${ACCENT}" stroke-width="5"/>`),
-  medical: svg(`<rect x="26" y="10" width="12" height="44" rx="3"/><rect x="10" y="26" width="44" height="12" rx="3"/>`),
-  walk: svg(`
-    <circle cx="20" cy="10" r="6"/>
-    <line x1="20" y1="16" x2="25" y2="33"/>
-    <line x1="25" y1="33" x2="16" y2="41"/><line x1="16" y1="41" x2="13" y2="55"/>
-    <line x1="25" y1="33" x2="35" y2="41"/><line x1="35" y1="41" x2="41" y2="53"/>
-    <line x1="22" y1="20" x2="30" y2="27"/>
-    <line x1="22" y1="20" x2="14" y2="27"/>
-  `),
-  run: svg(`
-    <circle cx="20" cy="10" r="6"/>
-    <line x1="20" y1="16" x2="30" y2="32"/>
-    <line x1="30" y1="32" x2="40" y2="28"/><line x1="40" y1="28" x2="46" y2="18"/>
-    <line x1="30" y1="32" x2="22" y2="42"/><line x1="22" y1="42" x2="28" y2="55"/>
-    <line x1="24" y1="20" x2="14" y2="14"/><line x1="14" y1="14" x2="8" y2="20"/>
-    <line x1="26" y1="22" x2="34" y2="18"/><line x1="34" y1="18" x2="40" y2="22"/>
-  `),
-  stairs: svg(`
-    <path d="M6 56 L6 46 L18 46 L18 36 L30 36 L30 26 L46 26"/>
-    <path d="M40 20 L46 26 L40 32" />
-  `),
-  chair_squat_a: svg(`
-    <line x1="14" y1="40" x2="38" y2="40" stroke-width="3.5"/>
-    <line x1="14" y1="40" x2="14" y2="56" stroke-width="3.5"/>
-    <line x1="14" y1="40" x2="14" y2="20" stroke-width="3.5"/>
-    <circle cx="26" cy="18" r="6"/>
-    <line x1="25" y1="24" x2="24" y2="38"/>
-    <line x1="24" y1="38" x2="34" y2="38"/><line x1="34" y1="38" x2="34" y2="56"/>
-    <line x1="24" y1="38" x2="24" y2="56"/>
-    <line x1="25" y1="27" x2="18" y2="32"/>
-  `),
-  chair_squat_b: svg(`
-    <line x1="14" y1="40" x2="38" y2="40" stroke-width="3.5"/>
-    <line x1="14" y1="40" x2="14" y2="56" stroke-width="3.5"/>
-    <line x1="14" y1="40" x2="14" y2="20" stroke-width="3.5"/>
-    <circle cx="42" cy="10" r="6"/>
-    <line x1="42" y1="16" x2="42" y2="30"/>
-    <line x1="42" y1="20" x2="52" y2="17"/>
-    <line x1="42" y1="30" x2="30" y2="35"/><line x1="30" y1="35" x2="32" y2="52"/>
-  `),
-  chair_legraise_a: svg(`
-    <line x1="8" y1="38" x2="32" y2="38" stroke-width="3.5"/>
-    <line x1="8" y1="38" x2="8" y2="56" stroke-width="3.5"/>
-    <line x1="8" y1="38" x2="8" y2="18" stroke-width="3.5"/>
-    <circle cx="20" cy="13" r="6"/>
-    <line x1="20" y1="19" x2="20" y2="38"/>
-    <line x1="20" y1="38" x2="18" y2="56"/>
-    <line x1="20" y1="22" x2="14" y2="30"/>
-  `),
-  chair_legraise_b: svg(`
-    <line x1="8" y1="38" x2="32" y2="38" stroke-width="3.5"/>
-    <line x1="8" y1="38" x2="8" y2="56" stroke-width="3.5"/>
-    <line x1="8" y1="38" x2="8" y2="18" stroke-width="3.5"/>
-    <circle cx="24" cy="13" r="6"/>
-    <line x1="23" y1="19" x2="21" y2="38"/>
-    <line x1="21" y1="38" x2="20" y2="54"/>
-    <line x1="21" y1="38" x2="40" y2="30"/><line x1="40" y1="30" x2="52" y2="34"/>
-    <line x1="23" y1="21" x2="34" y2="33"/>
-    <path d="M34 33 l4 2 l-1 -4.5" stroke-width="3"/>
-  `),
-  chair_dip_a: svg(`
-    <line x1="4" y1="30" x2="18" y2="30" stroke-width="3.5"/>
-    <line x1="4" y1="30" x2="4" y2="46" stroke-width="3.5"/>
-    <circle cx="30" cy="10" r="6"/>
-    <line x1="29" y1="16" x2="32" y2="28"/>
-    <line x1="16" y1="30" x2="29" y2="18"/>
-    <line x1="32" y1="28" x2="52" y2="36"/><line x1="52" y1="36" x2="58" y2="46"/>
-  `),
-  chair_dip_b: svg(`
-    <line x1="4" y1="30" x2="18" y2="30" stroke-width="3.5"/>
-    <line x1="4" y1="30" x2="4" y2="46" stroke-width="3.5"/>
-    <circle cx="30" cy="14" r="6"/>
-    <line x1="29" y1="20" x2="34" y2="34"/>
-    <line x1="16" y1="30" x2="29" y2="24"/>
-    <line x1="34" y1="34" x2="54" y2="40"/><line x1="54" y1="40" x2="60" y2="50"/>
-  `),
-  chair_balance_a: svg(`
-    <line x1="14" y1="50" x2="30" y2="50" stroke-width="3.5"/>
-    <line x1="30" y1="50" x2="30" y2="60" stroke-width="3.5"/>
-    <line x1="14" y1="50" x2="14" y2="14" stroke-width="3.5"/>
-    <circle cx="42" cy="12" r="6"/>
-    <line x1="42" y1="18" x2="42" y2="38"/>
-    <line x1="42" y1="22" x2="20" y2="27"/>
-    <line x1="42" y1="38" x2="37" y2="58"/>
-    <line x1="42" y1="38" x2="47" y2="58"/>
-  `),
-  chair_balance_b: svg(`
-    <line x1="14" y1="50" x2="30" y2="50" stroke-width="3.5"/>
-    <line x1="30" y1="50" x2="30" y2="60" stroke-width="3.5"/>
-    <line x1="14" y1="50" x2="14" y2="14" stroke-width="3.5"/>
-    <circle cx="42" cy="12" r="6"/>
-    <line x1="42" y1="18" x2="42" y2="38"/>
-    <line x1="42" y1="22" x2="20" y2="27"/>
-    <line x1="42" y1="38" x2="37" y2="52"/><path d="M34 55 q3 -3 6 0"/>
-    <line x1="42" y1="38" x2="47" y2="52"/><path d="M44 55 q3 -3 6 0"/>
-  `)
-};
-document.querySelectorAll('.pose[data-pose]').forEach(el => {
-  const key = el.dataset.pose;
-  if (POSES[key]) el.innerHTML = POSES[key];
-});
-
 // ---------- Tabs ----------
 const tabBtns = document.querySelectorAll('.tab-btn');
 const panels = document.querySelectorAll('.panel');
@@ -338,12 +29,13 @@ function weekDates(){
   return Array.from({length:7}, (_,i) => { const d = new Date(mon); d.setDate(mon.getDate()+i); return d; });
 }
 
-// log = { 'YYYY-MM-DD': { mobilite:bool, renfo:bool } }
+// log = { 'YYYY-MM-DD': { mobilite:bool, renfo:bool, cardio:bool, rpe:num, douleur:num } }
 let LOG = load('carnet57_log', {});
 const DAY_LABELS = ['L','M','M','J','V','S','D'];
 
 function buildWeekGrid(containerId, field){
   const container = document.getElementById(containerId);
+  if (!container) return;
   container.innerHTML = '';
   const dates = weekDates();
   const tKey = todayKey();
@@ -369,6 +61,7 @@ function updateStats(){
   const countField = f => dates.filter(k => LOG[k] && LOG[k][f]).length;
   document.getElementById('stat-mobilite').textContent = countField('mobilite');
   document.getElementById('stat-renfo').textContent = countField('renfo');
+  document.getElementById('stat-cardio').textContent = countField('cardio');
   document.getElementById('stat-water').textContent = (load('carnet57_water', {})[todayKey()] || 0);
 
   // streak (mobilite), consecutive days ending today
@@ -383,10 +76,24 @@ function updateStats(){
   streakEl.textContent = streak === 0
     ? 'Coche ta mobilité du jour pour démarrer une série'
     : streak + (streak > 1 ? ' jours de suite en mobilité' : ' jour de suite en mobilité');
+
+  // régularité du mois en cours (mobilité)
+  const now = new Date();
+  const daysSoFar = now.getDate();
+  let doneThisMonth = 0;
+  for (let i = 1; i <= daysSoFar; i++) {
+    const dte = new Date(now.getFullYear(), now.getMonth(), i);
+    const k = toKey(dte);
+    if (LOG[k] && LOG[k].mobilite) doneThisMonth++;
+  }
+  const pct = Math.round((doneThisMonth / daysSoFar) * 100);
+  const regEl = document.getElementById('stat-regularite');
+  if (regEl) regEl.textContent = pct + '%';
 }
 
 buildWeekGrid('week-mobilite', 'mobilite');
 buildWeekGrid('week-renfo', 'renfo');
+buildWeekGrid('week-cardio', 'cardio');
 
 // ---------- Poids + graphique ----------
 const poidsInput = document.getElementById('poids-input');
@@ -396,6 +103,7 @@ poidsInput.value = poidsHistory.length ? poidsHistory[poidsHistory.length - 1].v
 
 function drawChart(){
   const svgEl = document.getElementById('poids-chart');
+  if (!svgEl) return;
   svgEl.innerHTML = '';
   const data = poidsHistory.slice(-10);
   if (data.length < 2) {
@@ -466,10 +174,19 @@ function randomEncouragement(){ return ENCOURAGEMENTS[Math.floor(Math.random() *
 // ---------- Dashboard "Aujourd'hui" ----------
 const todayMobiliteCb = document.getElementById('today-mobilite');
 const todayRenfoCb = document.getElementById('today-renfo');
+const todayCardioCb = document.getElementById('today-cardio');
+const rpeBlock = document.getElementById('rpe-block');
+const rpeInput = document.getElementById('rpe-input');
+const rpeValue = document.getElementById('rpe-value');
+
 function syncTodayCheckboxes(){
   const t = LOG[todayKey()] || {};
   todayMobiliteCb.checked = !!t.mobilite;
   todayRenfoCb.checked = !!t.renfo;
+  todayCardioCb.checked = !!t.cardio;
+  rpeBlock.style.display = todayRenfoCb.checked ? 'block' : 'none';
+  rpeInput.value = t.rpe || 7;
+  rpeValue.textContent = t.rpe || '-';
 }
 syncTodayCheckboxes();
 todayMobiliteCb.addEventListener('change', () => {
@@ -486,7 +203,22 @@ todayRenfoCb.addEventListener('change', () => {
   save('carnet57_log', LOG);
   buildWeekGrid('week-renfo', 'renfo');
   updateStats();
+  rpeBlock.style.display = todayRenfoCb.checked ? 'block' : 'none';
   if (todayRenfoCb.checked) showToast(randomEncouragement());
+});
+todayCardioCb.addEventListener('change', () => {
+  LOG[todayKey()] = LOG[todayKey()] || {};
+  LOG[todayKey()].cardio = todayCardioCb.checked;
+  save('carnet57_log', LOG);
+  buildWeekGrid('week-cardio', 'cardio');
+  updateStats();
+  if (todayCardioCb.checked) showToast(randomEncouragement());
+});
+rpeInput.addEventListener('input', () => {
+  rpeValue.textContent = rpeInput.value;
+  LOG[todayKey()] = LOG[todayKey()] || {};
+  LOG[todayKey()].rpe = parseInt(rpeInput.value, 10);
+  save('carnet57_log', LOG);
 });
 
 function buildWater(containerId){
@@ -552,6 +284,7 @@ function updateRecordsAndBadges(){
   document.getElementById('stat-maxstreak').textContent = maxStreak;
 
   const row = document.getElementById('badges-row');
+  if (!row) return;
   row.innerHTML = '';
   BADGES_STREAK.forEach(b => {
     const span = document.createElement('span');
@@ -568,7 +301,6 @@ function updateRecordsAndBadges(){
 }
 updateRecordsAndBadges();
 
-// hook streak-text-today alongside existing streak-text
 const _origUpdateStats = updateStats;
 updateStats = function(){
   _origUpdateStats();
@@ -604,6 +336,90 @@ document.getElementById('import-file').addEventListener('change', (e) => {
   };
   reader.readAsText(file);
 });
+
+// ---------- Douleur / raideur du jour ----------
+const PAIN_EMOJIS = ['😀','🙂','😐','🙁','😣'];
+function buildPainRow(){
+  const row = document.getElementById('pain-row');
+  if (!row) return;
+  row.innerHTML = '';
+  const val = LOG[todayKey()] ? LOG[todayKey()].douleur : undefined;
+  PAIN_EMOJIS.forEach((emoji, i) => {
+    const cell = document.createElement('div');
+    cell.className = 'pain-cup' + (val === i ? ' on' : '');
+    cell.textContent = emoji;
+    cell.addEventListener('click', () => {
+      LOG[todayKey()] = LOG[todayKey()] || {};
+      LOG[todayKey()].douleur = i;
+      save('carnet57_log', LOG);
+      buildPainRow();
+      drawPainChart();
+    });
+    row.appendChild(cell);
+  });
+}
+function drawPainChart(){
+  const svgEl = document.getElementById('pain-chart');
+  if (!svgEl) return;
+  svgEl.innerHTML = '';
+  const dates = Object.keys(LOG).filter(k => LOG[k] && LOG[k].douleur !== undefined).sort().slice(-14);
+  if (dates.length < 2) {
+    svgEl.innerHTML = '<text x="10" y="45" font-size="11" fill="#8AA5A2">Coche ta douleur/raideur quelques jours pour voir la tendance</text>';
+    return;
+  }
+  const w = 300, h = 90, pad = 8;
+  const pts = dates.map((k, i) => {
+    const x = pad + (i / (dates.length - 1)) * (w - pad*2);
+    const y = h - pad - (1 - LOG[k].douleur / 4) * (h - pad*2);
+    return [x, y];
+  });
+  const path = pts.map((p,i) => (i===0?'M':'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  svgEl.innerHTML = `<path d="${path}" fill="none" stroke="#FD9C29" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` +
+    pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#0FA2B6"/>`).join('');
+}
+buildPainRow();
+drawPainChart();
+
+// ---------- Semaine du programme (Progression dynamique) ----------
+const PHASES = [
+  { min: 1, max: 4, phase: 1, label: 'Fondations' },
+  { min: 5, max: 8, phase: 2, label: 'Consolidation' },
+  { min: 9, max: 12, phase: 3, label: 'Autonomie' },
+  { min: 13, max: 99, phase: 4, label: 'Au-delà' }
+];
+function phaseForWeek(w){ return PHASES.find(p => w >= p.min && w <= p.max) || PHASES[3]; }
+function buildWeekPicker(){
+  const container = document.getElementById('week-picker');
+  if (!container) return;
+  container.innerHTML = '';
+  const current = load('carnet57_week', 1);
+  for (let i = 1; i <= 12; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    if (i === current) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      save('carnet57_week', i);
+      buildWeekPicker();
+      updatePhaseDisplay();
+    });
+    container.appendChild(btn);
+  }
+  const p = phaseForWeek(current);
+  document.getElementById('week-picker-note').textContent = `Semaine ${current}/12 · Phase : ${p.label}`;
+}
+function updatePhaseDisplay(){
+  const current = load('carnet57_week', 1);
+  const p = phaseForWeek(current);
+  document.querySelectorAll('.progress-step').forEach(el => {
+    el.classList.toggle('current', parseInt(el.dataset.phase, 10) === p.phase);
+  });
+  const noteEl = document.getElementById('phase-note');
+  if (noteEl) noteEl.textContent = `📅 Semaine ${current}/12 du programme · Phase ${p.phase} : ${p.label}`;
+  const pickerNote = document.getElementById('week-picker-note');
+  if (pickerNote) pickerNote.textContent = `Semaine ${current}/12 · Phase : ${p.label}`;
+}
+buildWeekPicker();
+updatePhaseDisplay();
 
 // ---------- PWA service worker ----------
 if ('serviceWorker' in navigator) {
