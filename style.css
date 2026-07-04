@@ -168,10 +168,9 @@ main{
 }
 .card ul{margin:6px 0 0; padding-left:18px; font-size:13px; line-height:1.5; color:#3E5D5A;}
 
-/* --- NOUVEAU SYSTÈME D'ILLUSTRATIONS (SPRITES) --- */
+/* --- NOUVEAU SYSTÈME D'ILLUSTRATIONS (SPRITES CORRIGÉS) --- */
 .exercise-illustration {
   width: 100%;
-  height: 170px;
   background-image: url('1000178323.png');
   background-repeat: no-repeat;
   border-radius: 10px;
@@ -179,8 +178,12 @@ main{
   border: 1px solid var(--line);
 }
 
-/* Ligne 1 : Mobilité */
-.img-01, .img-02, .img-03, .img-04, .img-05, .img-06 { background-size: 615% 425%; background-position-y: 3.5%; }
+/* Ligne 1 : Mobilité (6 colonnes) */
+.img-01, .img-02, .img-03, .img-04, .img-05, .img-06 { 
+  aspect-ratio: 1.35; 
+  background-size: 615% auto; 
+  background-position-y: 1.5%; 
+}
 .img-01 { background-position-x: 0%; }
 .img-02 { background-position-x: 20%; }
 .img-03 { background-position-x: 40%; }
@@ -188,8 +191,12 @@ main{
 .img-05 { background-position-x: 80%; }
 .img-06 { background-position-x: 100%; }
 
-/* Ligne 2 : Renforcement */
-.img-07, .img-08, .img-09, .img-10, .img-11, .img-12, .img-13 { background-size: 718% 425%; background-position-y: 35.5%; }
+/* Ligne 2 : Renforcement (7 colonnes) */
+.img-07, .img-08, .img-09, .img-10, .img-11, .img-12, .img-13 { 
+  aspect-ratio: 1.22; 
+  background-size: 717% auto; 
+  background-position-y: 37.8%; 
+}
 .img-07 { background-position-x: 0%; }
 .img-08 { background-position-x: 16.6%; }
 .img-09 { background-position-x: 33.3%; }
@@ -198,15 +205,23 @@ main{
 .img-12 { background-position-x: 83.3%; }
 .img-13 { background-position-x: 100%; }
 
-/* Ligne 3 : Maison */
-.img-14, .img-15, .img-16, .img-17 { background-size: 410% 425%; background-position-y: 67.5%; }
+/* Ligne 3 : Maison (4 colonnes) */
+.img-14, .img-15, .img-16, .img-17 { 
+  aspect-ratio: 1.55; 
+  background-size: 410% auto; 
+  background-position-y: 68.2%; 
+}
 .img-14 { background-position-x: 0%; }
 .img-15 { background-position-x: 33.3%; }
 .img-16 { background-position-x: 66.6%; }
 .img-17 { background-position-x: 100%; }
 
-/* Ligne 4 : Cardio & Repères */
-.img-18, .img-19, .img-20, .img-sommeil, .img-respiration { background-size: 512% 425%; background-position-y: 98%; }
+/* Ligne 4 : Cardio & Repères (5 colonnes) */
+.img-18, .img-19, .img-20, .img-sommeil, .img-respiration { 
+  aspect-ratio: 1.45; 
+  background-size: 512% auto; 
+  background-position-y: 99%; 
+}
 .img-18 { background-position-x: 0%; }
 .img-19 { background-position-x: 25%; }
 .img-20 { background-position-x: 50%; }
