@@ -168,48 +168,68 @@ main{
 }
 .card ul{margin:6px 0 0; padding-left:18px; font-size:13px; line-height:1.5; color:#3E5D5A;}
 
-/* --- CONFIGURATION DES ILLUSTRATIONS SUR MESURE (SPRITES) --- */
+/* --- DOUBLE GRILLE ALGORITHMIQUE POUR LES 4 BANDES THÉMATIQUES --- */
 .exercise-illustration {
   width: 100%;
-  background-image: url('1000178323.png');
   background-repeat: no-repeat;
   border-radius: 10px;
   background-color: #ffffff;
   border: 1px solid var(--line);
 }
 
-/* Ligne 1 : Mobilité */
-.img-01, .img-02, .img-03, .img-04, .img-05, .img-06 { background-size: 615% auto; }
-.img-01 { aspect-ratio: 1.35; background-position: 0% 1.5%; }
-.img-02 { aspect-ratio: 1.05; background-position: 20% 1.5%; }
-.img-03 { aspect-ratio: 1.05; background-position: 40% 1.5%; }
-.img-04 { aspect-ratio: 1.05; background-position: 60% 1.5%; }
-.img-05 { aspect-ratio: 1.05; background-position: 80% 1.5%; }
-.img-06 { aspect-ratio: 1.05; background-position: 100% 1.5%; }
+/* Ligne 1 : Mobilité (6 colonnes horizontales) -> Image 1000178398.jpg */
+.img-01, .img-02, .img-03, .img-04, .img-05, .img-06 { 
+  background-image: url('1000178398.jpg');
+  background-size: 600% 100%; 
+  aspect-ratio: 1.25;
+  background-position-y: center;
+}
+.img-01 { background-position-x: 0%; }
+.img-02 { background-position-x: 20%; }
+.img-03 { background-position-x: 40%; }
+.img-04 { background-position-x: 60%; }
+.img-05 { background-position-x: 80%; }
+.img-06 { background-position-x: 100%; }
 
-/* Ligne 2 : Renforcement */
-.img-07 { aspect-ratio: 1.35; background-size: 660% auto; background-position: 0% 37.5%; }
-.img-08 { aspect-ratio: 1.35; background-size: 670% auto; background-position: 16.5% 37.5%; }
-.img-09 { aspect-ratio: 1.35; background-size: 585% auto; background-position: 33.6% 37.6%; }
-.img-12 { aspect-ratio: 1.35; background-size: 690% auto; background-position: 83.4% 37.5%; }
-.img-10 { aspect-ratio: 0.85; background-size: 780% auto; background-position: 50.1% 37.9%; }
-.img-11 { aspect-ratio: 0.85; background-size: 785% auto; background-position: 66.8% 37.9%; }
-.img-13 { aspect-ratio: 0.85; background-size: 775% auto; background-position: 100% 37.9%; }
+/* Ligne 2 : Renforcement (7 colonnes horizontales) -> Image 1000178399.jpg */
+.img-07, .img-08, .img-09, .img-10, .img-11, .img-12, .img-13 { 
+  background-image: url('1000178399.jpg');
+  background-size: 700% 100%; 
+  aspect-ratio: 1.15;
+  background-position-y: center;
+}
+.img-07 { background-position-x: 0%; }
+.img-08 { background-position-x: 16.666%; }
+.img-09 { background-position-x: 33.333%; }
+.img-10 { background-position-x: 50%; }
+.img-11 { background-position-x: 66.666%; }
+.img-12 { background-position-x: 83.333%; }
+.img-13 { background-position-x: 100%; }
 
-/* Ligne 3 : Maison */
-.img-14, .img-15, .img-16, .img-17 { background-size: 410% auto; background-position-y: 68.2%; }
-.img-14 { aspect-ratio: 1.45; background-position-x: 0%; }
-.img-15 { aspect-ratio: 1.45; background-position-x: 33.3%; }
-.img-16 { aspect-ratio: 1.45; background-position-x: 66.6%; }
-.img-17 { aspect-ratio: 1.45; background-position-x: 100%; }
+/* Ligne 3 : Maison & Cardio (7 colonnes horizontales) -> Image 1000178400.jpg */
+.img-14, .img-15, .img-16, .img-17, .img-18, .img-19, .img-20 { 
+  background-image: url('1000178400.jpg');
+  background-size: 700% 100%; 
+  aspect-ratio: 1.15;
+  background-position-y: center;
+}
+.img-14 { background-position-x: 0%; }
+.img-15 { background-position-x: 16.666%; }
+.img-16 { background-position-x: 33.333%; }
+.img-17 { background-position-x: 50%; }
+.img-18 { background-position-x: 66.666%; }
+.img-19 { background-position-x: 83.333%; }
+.img-20 { background-position-x: 100%; }
 
-/* Ligne 4 : Cardio & Repères */
-.img-18, .img-19, .img-20, .img-sommeil, .img-respiration { background-size: 512% auto; background-position-y: 99%; }
-.img-18 { aspect-ratio: 1.4; background-position-x: 0%; }
-.img-19 { aspect-ratio: 1.4; background-position-x: 25%; }
-.img-20 { aspect-ratio: 1.4; background-position-x: 50%; }
-.img-sommeil { aspect-ratio: 1.4; background-position-x: 75%; }
-.img-respiration { aspect-ratio: 1.4; background-position-x: 100%; }
+/* Ligne 4 : Repères (2 colonnes horizontales isolées) -> Image 1000178401.jpg */
+.img-sommeil, .img-respiration { 
+  background-image: url('1000178401.jpg');
+  background-size: 200% 100%; 
+  aspect-ratio: 1.35;
+  background-position-y: center;
+}
+.img-sommeil { background-position-x: 0%; }
+.img-respiration { background-position-x: 100%; }
 /* ------------------------------------------------------------- */
 
 .block-title{
