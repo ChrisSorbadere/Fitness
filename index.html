@@ -6,7 +6,7 @@
 <title>Fitness 57</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0FA2B6">
-<link class="icon" href="icon-192.png" type="image/png">
+<link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -17,7 +17,7 @@
     <img class="app-icon" src="icon-192.png" alt="Fitness 57">
     <div class="htext">
       <div class="eyebrow">57 ans · 75 kg · mobilité & prévention</div>
-      <h1>FITNESS 57 <span class="version">v1.4</span></h1>
+      <h1>FITNESS 57 <span class="version">v1.5</span></h1>
       <div class="sub">Ton coach mobilité, renfort & nutrition</div>
     </div>
   </header>
@@ -41,10 +41,18 @@
       <div class="quote-banner" id="quote-banner"></div>
 
       <div class="streak-banner"><span class="fire">🔥</span><span id="streak-text-today"></span></div>
+      <div class="note" id="phase-note" style="margin:-6px 0 12px;"></div>
 
       <div class="block-title">Coché aujourd'hui</div>
       <div class="check-row"><input type="checkbox" id="today-mobilite"><label for="today-mobilite">Routine mobilité faite</label></div>
       <div class="check-row"><input type="checkbox" id="today-renfo"><label for="today-renfo">Séance renfort ou maison faite</label></div>
+      <div class="check-row"><input type="checkbox" id="today-cardio"><label for="today-cardio">Cardio fait (marche/course/escaliers)</label></div>
+
+      <div id="rpe-block" style="display:none;">
+        <div class="block-title alt">Ressenti d'effort de la séance (RPE)</div>
+        <input type="range" id="rpe-input" min="1" max="10" step="1">
+        <div class="note">Valeur : <strong id="rpe-value">-</strong>/10 — cible 6-7. Détail de l'échelle dans Repères.</div>
+      </div>
 
       <div class="block-title">Hydratation</div>
       <div class="water-row" id="water-row-today"></div>
@@ -54,6 +62,7 @@
         <div class="stat-box"><div class="num" id="stat-totalmobilite">0</div><div class="lbl">Jours mobilité (total)</div></div>
         <div class="stat-box"><div class="num" id="stat-maxstreak">0</div><div class="lbl">Record de suite</div></div>
         <div class="stat-box"><div class="num" id="stat-totalrenfo">0</div><div class="lbl">Séances renfort (total)</div></div>
+        <div class="stat-box"><div class="num" id="stat-regularite">0%</div><div class="lbl">Régularité ce mois</div></div>
       </div>
 
       <div class="block-title">Badges</div>
@@ -123,7 +132,15 @@
 
     <!-- RENFORCEMENT -->
     <section class="panel" id="panel-renfo">
-      <div class="intro">2 à 3 séances/semaine, 20-25 min, haltères et bandes. Priorité à la technique sur la charge : l'objectif est la solidité des articulations.</div>
+      <div class="intro">2 à 3 séances/semaine, 20-25 min, haltètres et bandes. Priorité à la technique sur la charge : l'objectif est la solidité des articulations.</div>
+
+      <div class="card">
+        <div class="body">
+          <div class="headrow"><h3>Échauffement (obligatoire)</h3><span class="n">00</span></div>
+          <div class="meta">2-3 min avant chaque séance</div>
+          <p>10 rotations de chevilles, 10 de genoux, 10 de hanches, 10 d'épaules, 10 de poignets. C'est la routine Mobilité en version rapide — elle prépare les articulations avant la charge.</p>
+        </div>
+      </div>
 
       <div class="card">
         <div class="exercise-illustration img-07"></div>
@@ -191,7 +208,7 @@
         </div>
       </div>
 
-      <div class="note">Échelle de ressenti (RPE) : viser 6-7/10 en fin de série — un effort réel mais sans forcer sur la dernière répétition. Toujours 2-3 minutes d'échauffement articulaire (mobilité) avant, et quelques respirations calmes après.</div>
+      <div class="note">Échelle de ressenti (RPE) : viser 6-7/10 en fin de série — un effort réel mais sans forcer sur la dernière répétition. Détail de l'échelle dans l'onglet Repères. Quelques respirations calmes après la séance.</div>
     </section>
 
     <!-- MAISON -->
@@ -349,20 +366,24 @@
     <section class="panel" id="panel-progression">
       <div class="intro">Un plan sur 12 semaines pour progresser sans te blesser. Pas besoin de le suivre à la lettre — c'est un fil conducteur.</div>
 
+      <div class="block-title">Ta semaine actuelle</div>
+      <div class="week-picker" id="week-picker"></div>
+      <div class="note" id="week-picker-note"></div>
+
       <div class="progress-track">
-        <div class="progress-step">
+        <div class="progress-step" data-phase="1">
           <h4>Semaines 1-4 · Fondations</h4>
           <p>Mobilité tous les jours, renforcement 2×/semaine avec des charges légères. L'objectif est d'apprendre le geste juste, pas de forcer. Note tes ressentis dans le Suivi.</p>
         </div>
-        <div class="progress-step">
+        <div class="progress-step" data-phase="2">
           <h4>Semaines 5-8 · Consolidation</h4>
-          <p>Renforcement 3×/semaine. Augmente légèrement les charges ou les répétitions si les séries précédentes te semblaient faciles (RPE &lt; 6). Ajoute l'équilibre yeux fermés si celui yeux ouverts est solide.</p>
+          <p>Renforcement 3×/semaine. Augmente légèrement les charges ou les répétitions si les séries précédentes te semblaient faciles (RPE &lt; 6, voir l'échelle dans Repères). Ajoute l'équilibre yeux fermés si celui yeux ouverts est solide.</p>
         </div>
-        <div class="progress-step">
+        <div class="progress-step" data-phase="3">
           <h4>Semaines 9-12 · Autonomie</h4>
           <p>La routine devient un réflexe. Refais les tests de repère (planche, équilibre, souplesse) et compare à ta première mesure. Fixe-toi un objectif concret : une randonnée, une durée de marche, une charge précise.</p>
         </div>
-        <div class="progress-step">
+        <div class="progress-step" data-phase="4">
           <h4>Au-delà</h4>
           <p>Reprends un cycle de 12 semaines en augmentant légèrement l'exigence, ou stabilise-toi si le niveau atteint te convient. L'important est la régularité, pas l'escalade continue.</p>
         </div>
@@ -378,6 +399,7 @@
       <div class="stat-row">
         <div class="stat-box"><div class="num" id="stat-mobilite">0</div><div class="lbl">Mobilité / 7j</div></div>
         <div class="stat-box"><div class="num" id="stat-renfo">0</div><div class="lbl">Renfort / 7j</div></div>
+        <div class="stat-box"><div class="num" id="stat-cardio">0</div><div class="lbl">Cardio / 7j</div></div>
         <div class="stat-box"><div class="num" id="stat-water">0</div><div class="lbl">Verres d'eau</div></div>
       </div>
 
@@ -387,8 +409,15 @@
       <div class="block-title">Séances de renforcement — cette semaine</div>
       <div class="week-grid" id="week-renfo"></div>
 
+      <div class="block-title">Cardio — cette semaine</div>
+      <div class="week-grid" id="week-cardio"></div>
+
       <div class="block-title">Hydratation — aujourd'hui</div>
       <div class="water-row" id="water-row"></div>
+
+      <div class="block-title">Douleur / raideur du jour</div>
+      <div class="pain-row" id="pain-row"></div>
+      <div class="chart-wrap"><svg id="pain-chart" viewBox="0 0 300 90" width="100%" height="90"></svg></div>
 
       <div class="block-title">Poids (kg)</div>
       <input type="number" id="poids-input" placeholder="75" step="0.1">
@@ -408,6 +437,14 @@
         <li>→ Rechercher « soulevé de terre jambes tendues technique »</li>
         <li>→ Rechercher « bird dog exercise correct form »</li>
       </ul>
+
+      <div class="block-title">Échelle de ressenti (RPE)</div>
+      <table class="menu">
+        <tr><th>Niveau</th><th>Ce que tu ressens</th></tr>
+        <tr><td><strong>5-6/10</strong></td><td>Facile, essoufflement léger. Tu pourrais faire plusieurs répétitions de plus.</td></tr>
+        <tr><td><strong>7-8/10</strong></td><td>Difficile, les 2 dernières répétitions sont dures mais la technique reste propre. C'est la cible pour le renfort.</td></tr>
+        <tr><td><strong>9-10/10</strong></td><td>Échec postural — la technique se dégrade. À éviter en prévention des blessures.</td></tr>
+      </table>
 
       <div class="block-title">Repère de portions à l'œil (sans balance)</div>
       <div class="pill-row">
@@ -442,7 +479,7 @@
       <div class="card">
         <div class="body">
           <div class="headrow"><h3>Bilan médical de routine</h3></div>
-          <p>Sans antécédent ni urgence : une visite de routine (tension, bilan sanguin de base) tous les 1-2 ans à cet âge reste une bonne habitude.</p>
+          <p>Sans antécédent ni urgence : une visite de routine (tension, bilan sanguin de base) tous les 1-2 ans à cet âge reste une bonne habitube.</p>
         </div>
       </div>
 
