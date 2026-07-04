@@ -272,28 +272,6 @@ function updateStats(){
 buildWeekGrid('week-mobilite', 'mobilite');
 buildWeekGrid('week-renfo', 'renfo');
 
-// ---------- Water tracker ----------
-function buildWater(){
-  const row = document.getElementById('water-row');
-  row.innerHTML = '';
-  const water = load('carnet57_water', {});
-  const n = water[todayKey()] || 0;
-  for (let i = 1; i <= 8; i++) {
-    const cup = document.createElement('div');
-    cup.className = 'water-cup' + (i <= n ? ' on' : '');
-    cup.textContent = '💧';
-    cup.addEventListener('click', () => {
-      const w = load('carnet57_water', {});
-      w[todayKey()] = (w[todayKey()] === i) ? i - 1 : i;
-      save('carnet57_water', w);
-      buildWater();
-      updateStats();
-    });
-    row.appendChild(cup);
-  }
-}
-buildWater();
-
 // ---------- Poids + graphique ----------
 const poidsInput = document.getElementById('poids-input');
 const poidsNote = document.getElementById('poids-note');
@@ -339,6 +317,177 @@ notesInput.value = load('carnet57_notes', '');
 notesInput.addEventListener('input', () => save('carnet57_notes', notesInput.value));
 
 updateStats();
+
+// ---------- Citations du jour ----------
+const QUOTES = [
+  "Un jour sans mobilité, ce sont des articulations qui rouillent un peu plus vite.",
+  "10 minutes aujourd'hui valent mieux qu'une heure qu'on ne fera jamais.",
+  "La régularité bat l'intensité, à tout âge.",
+  "Le corps s'adapte à ce qu'on lui demande — même à 57 ans.",
+  "Pas besoin de performance, juste de présence.",
+  "Chaque série d'équilibre d'aujourd'hui est une chute évitée demain.",
+  "La meilleure séance est celle qu'on fait vraiment, pas celle qu'on imagine parfaite.",
+  "Bouger un peu tous les jours change plus de choses que s'épuiser une fois par mois.",
+  "Ton corps de demain se construit avec les choix d'aujourd'hui.",
+  "Une routine simple et tenue vaut mieux qu'un programme parfait abandonné."
+];
+function dayOfYear(d){ const start = new Date(d.getFullYear(),0,0); return Math.floor((d - start) / 86400000); }
+document.getElementById('quote-banner').textContent = QUOTES[dayOfYear(new Date()) % QUOTES.length];
+
+// ---------- Toast ----------
+const ENCOURAGEMENTS = ['Bien joué 💪', 'C\'est noté !', 'Un pas de plus 👣', 'Bravo, continue comme ça', 'Enregistré ✓'];
+let toastTimer;
+function showToast(msg){
+  let el = document.getElementById('toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1600);
+}
+function randomEncouragement(){ return ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)]; }
+
+// ---------- Dashboard "Aujourd'hui" ----------
+const todayMobiliteCb = document.getElementById('today-mobilite');
+const todayRenfoCb = document.getElementById('today-renfo');
+function syncTodayCheckboxes(){
+  const t = LOG[todayKey()] || {};
+  todayMobiliteCb.checked = !!t.mobilite;
+  todayRenfoCb.checked = !!t.renfo;
+}
+syncTodayCheckboxes();
+todayMobiliteCb.addEventListener('change', () => {
+  LOG[todayKey()] = LOG[todayKey()] || {};
+  LOG[todayKey()].mobilite = todayMobiliteCb.checked;
+  save('carnet57_log', LOG);
+  buildWeekGrid('week-mobilite', 'mobilite');
+  updateStats();
+  if (todayMobiliteCb.checked) showToast(randomEncouragement());
+});
+todayRenfoCb.addEventListener('change', () => {
+  LOG[todayKey()] = LOG[todayKey()] || {};
+  LOG[todayKey()].renfo = todayRenfoCb.checked;
+  save('carnet57_log', LOG);
+  buildWeekGrid('week-renfo', 'renfo');
+  updateStats();
+  if (todayRenfoCb.checked) showToast(randomEncouragement());
+});
+
+function buildWater(containerId){
+  const row = document.getElementById(containerId);
+  if (!row) return;
+  row.innerHTML = '';
+  const water = load('carnet57_water', {});
+  const n = water[todayKey()] || 0;
+  for (let i = 1; i <= 8; i++) {
+    const cup = document.createElement('div');
+    cup.className = 'water-cup' + (i <= n ? ' on' : '');
+    cup.textContent = '💧';
+    cup.addEventListener('click', () => {
+      const w = load('carnet57_water', {});
+      w[todayKey()] = (w[todayKey()] === i) ? i - 1 : i;
+      save('carnet57_water', w);
+      buildWater('water-row');
+      buildWater('water-row-today');
+      updateStats();
+    });
+    row.appendChild(cup);
+  }
+}
+buildWater('water-row');
+buildWater('water-row-today');
+
+// ---------- Records & badges ----------
+const BADGES_STREAK = [
+  { n: 3, label: '🔥 3 jours' },
+  { n: 7, label: '🥉 7 jours' },
+  { n: 14, label: '🥈 14 jours' },
+  { n: 30, label: '🥇 30 jours' },
+  { n: 60, label: '🏆 60 jours' },
+  { n: 100, label: '💎 100 jours' }
+];
+const BADGES_RENFO = [
+  { n: 10, label: '🏋️ 10 séances' },
+  { n: 25, label: '🏋️ 25 séances' },
+  { n: 50, label: '🏋️ 50 séances' },
+  { n: 100, label: '🏋️ 100 séances' }
+];
+
+function computeLifetime(){
+  const mobKeys = Object.keys(LOG).filter(k => LOG[k] && LOG[k].mobilite).sort();
+  const totalMobilite = mobKeys.length;
+  const totalRenfo = Object.keys(LOG).filter(k => LOG[k] && LOG[k].renfo).length;
+  let maxStreak = 0, cur = 0, prev = null;
+  mobKeys.forEach(k => {
+    if (prev) {
+      const diff = Math.round((new Date(k) - new Date(prev)) / 86400000);
+      cur = diff === 1 ? cur + 1 : 1;
+    } else cur = 1;
+    if (cur > maxStreak) maxStreak = cur;
+    prev = k;
+  });
+  return { totalMobilite, totalRenfo, maxStreak };
+}
+
+function updateRecordsAndBadges(){
+  const { totalMobilite, totalRenfo, maxStreak } = computeLifetime();
+  document.getElementById('stat-totalmobilite').textContent = totalMobilite;
+  document.getElementById('stat-totalrenfo').textContent = totalRenfo;
+  document.getElementById('stat-maxstreak').textContent = maxStreak;
+
+  const row = document.getElementById('badges-row');
+  row.innerHTML = '';
+  BADGES_STREAK.forEach(b => {
+    const span = document.createElement('span');
+    span.className = 'pill' + (maxStreak >= b.n ? ' strong' : '');
+    span.textContent = b.label;
+    row.appendChild(span);
+  });
+  BADGES_RENFO.forEach(b => {
+    const span = document.createElement('span');
+    span.className = 'pill' + (totalRenfo >= b.n ? ' strong' : '');
+    span.textContent = b.label;
+    row.appendChild(span);
+  });
+}
+updateRecordsAndBadges();
+
+// hook streak-text-today alongside existing streak-text
+const _origUpdateStats = updateStats;
+updateStats = function(){
+  _origUpdateStats();
+  const streakEl2 = document.getElementById('streak-text-today');
+  if (streakEl2) streakEl2.textContent = document.getElementById('streak-text').textContent;
+  updateRecordsAndBadges();
+};
+updateStats();
+
+// ---------- Export / import ----------
+document.getElementById('btn-export').addEventListener('click', () => {
+  const data = {};
+  Object.keys(localStorage).filter(k => k.startsWith('carnet57_')).forEach(k => data[k] = localStorage.getItem(k));
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'fitness57-sauvegarde-' + todayKey() + '.json';
+  a.click();
+});
+document.getElementById('import-file').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const data = JSON.parse(reader.result);
+      Object.keys(data).forEach(k => localStorage.setItem(k, data[k]));
+      document.getElementById('import-note').textContent = 'Import réussi. Rechargement...';
+      setTimeout(() => location.reload(), 800);
+    } catch {
+      document.getElementById('import-note').textContent = 'Fichier invalide.';
+    }
+  };
+  reader.readAsText(file);
+});
 
 // ---------- PWA service worker ----------
 if ('serviceWorker' in navigator) {

@@ -17,13 +17,14 @@
     <img class="app-icon" src="icon-192.png" alt="Fitness 57">
     <div class="htext">
       <div class="eyebrow">57 ans · 75 kg · mobilité & prévention</div>
-      <h1>FITNESS 57 <span class="version">v1.2</span></h1>
+      <h1>FITNESS 57 <span class="version">v1.3</span></h1>
       <div class="sub">Ton coach mobilité, renfort & nutrition</div>
     </div>
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" data-tab="mobilite">Mobilité</button>
+    <button class="tab-btn active" data-tab="today">Aujourd'hui</button>
+    <button class="tab-btn" data-tab="mobilite">Mobilité</button>
     <button class="tab-btn" data-tab="renfo">Renfort</button>
     <button class="tab-btn" data-tab="maison">Maison</button>
     <button class="tab-btn" data-tab="cardio">Cardio</button>
@@ -35,8 +36,32 @@
 
   <main>
 
+    <!-- AUJOURD'HUI -->
+    <section class="panel active" id="panel-today">
+      <div class="quote-banner" id="quote-banner"></div>
+
+      <div class="streak-banner"><span class="fire">🔥</span><span id="streak-text-today"></span></div>
+
+      <div class="block-title">Coché aujourd'hui</div>
+      <div class="check-row"><input type="checkbox" id="today-mobilite"><label for="today-mobilite">Routine mobilité faite</label></div>
+      <div class="check-row"><input type="checkbox" id="today-renfo"><label for="today-renfo">Séance renfort ou maison faite</label></div>
+
+      <div class="block-title">Hydratation</div>
+      <div class="water-row" id="water-row-today"></div>
+
+      <div class="block-title">Tes records</div>
+      <div class="stat-row">
+        <div class="stat-box"><div class="num" id="stat-totalmobilite">0</div><div class="lbl">Jours mobilité (total)</div></div>
+        <div class="stat-box"><div class="num" id="stat-maxstreak">0</div><div class="lbl">Record de suite</div></div>
+        <div class="stat-box"><div class="num" id="stat-totalrenfo">0</div><div class="lbl">Séances renfort (total)</div></div>
+      </div>
+
+      <div class="block-title">Badges</div>
+      <div class="pill-row" id="badges-row"></div>
+    </section>
+
     <!-- MOBILITE -->
-    <section class="panel active" id="panel-mobilite">
+    <section class="panel" id="panel-mobilite">
       <div class="intro">Routine quotidienne, ~10 minutes. Chaque jour, idéalement le matin ou avant la marche. Mouvements lents, jamais en force ni en douleur.</div>
 
       <div class="card">
@@ -115,6 +140,7 @@
           <div class="headrow"><h3>Squat gobelet</h3><span class="n">02</span></div>
           <div class="meta">3 × 12</div>
           <p>Haltère tenu à deux mains contre la poitrine. Descente contrôlée, genoux dans l'axe des pieds, talons au sol.</p>
+          <p class="warn">⚠️ Erreur fréquente : les genoux qui rentrent vers l'intérieur. Pense à les pousser légèrement vers l'extérieur.</p>
         </div>
       </div>
 
@@ -124,6 +150,7 @@
           <div class="headrow"><h3>Soulevé de terre jambes tendues (RDL)</h3><span class="n">03</span></div>
           <div class="meta">3 × 10</div>
           <p>Un haltère par main, jambes presque tendues, bascule du buste en gardant le dos plat. Clé pour le bas du dos.</p>
+          <p class="warn">⚠️ Erreur fréquente : arrondir le dos. Le mouvement part de la hanche, pas de la colonne.</p>
         </div>
       </div>
 
@@ -133,6 +160,7 @@
           <div class="headrow"><h3>Gainage planche</h3><span class="n">04</span></div>
           <div class="meta">3 × 30-45 s</div>
           <p>Appui sur avant-bras et pointes de pieds, corps aligné tête-bassin-talons, ventre gainé.</p>
+          <p class="warn">⚠️ Erreur fréquente : le bassin qui tombe ou qui monte trop haut. Vise une ligne droite, comme une planche de bois.</p>
         </div>
       </div>
 
@@ -194,6 +222,7 @@
           <div class="headrow"><h3>Dips triceps sur chaise</h3><span class="n">03</span></div>
           <div class="meta">3 × 8-10</div>
           <p>Mains sur le bord de la chaise, jambes tendues devant, fesses juste devant l'assise. Plier les coudes pour descendre, remonter sans bloquer les coudes. Amplitude réduite si gêne à l'épaule.</p>
+          <p class="warn">⚠️ Erreur fréquente : descendre trop bas, ce qui stresse l'épaule. Une flexion de coude à 90° suffit largement.</p>
         </div>
       </div>
 
@@ -418,6 +447,14 @@
           <p>Sans antécédent ni urgence : une visite de routine (tension, bilan sanguin de base) tous les 1-2 ans à cet âge reste une bonne habitude.</p>
         </div>
       </div>
+
+      <div class="block-title alt">Sauvegarde des données</div>
+      <p style="font-size:13px; color:#3E5D5A; margin:0 0 8px;">Tout est stocké uniquement sur cet appareil. Exporte régulièrement pour ne rien perdre si tu changes de téléphone.</p>
+      <div class="pill-row">
+        <span class="pill strong" id="btn-export" style="cursor:pointer;">⬇ Exporter mes données</span>
+        <label class="pill strong" style="cursor:pointer;">⬆ Importer<input type="file" id="import-file" accept="application/json" style="display:none;"></label>
+      </div>
+      <div class="note" id="import-note"></div>
     </section>
 
   </main>
