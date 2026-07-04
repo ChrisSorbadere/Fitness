@@ -1,4 +1,142 @@
-// --- Tabs ---
+// ---------- Illustrations (SVG originales, style pictogramme) ----------
+const STROKE = '#103E45';
+const ACCENT = '#FD9C29';
+function svg(inner){
+  return `<svg viewBox="0 0 64 64" width="70%" height="70%" fill="none" stroke="${STROKE}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+}
+const POSES = {
+  neck: svg(`
+    <circle cx="32" cy="13" r="6"/>
+    <line x1="32" y1="19" x2="32" y2="40"/>
+    <line x1="32" y1="23" x2="21" y2="35"/>
+    <line x1="32" y1="23" x2="43" y2="35"/>
+    <line x1="32" y1="40" x2="24" y2="58"/>
+    <line x1="32" y1="40" x2="40" y2="58"/>
+    <path d="M18 9 Q10 13 14 21" stroke="${ACCENT}" stroke-width="3"/>
+    <path d="M14 21 l-4 -2 l1.5 4" stroke="${ACCENT}" stroke-width="3"/>
+    <path d="M46 9 Q54 13 50 21" stroke="${ACCENT}" stroke-width="3"/>
+    <path d="M50 21 l4 -2 l-1.5 4" stroke="${ACCENT}" stroke-width="3"/>
+  `),
+  catcow: svg(`
+    <circle cx="12" cy="24" r="5"/>
+    <path d="M17,27 Q32,13 47,27"/>
+    <line x1="19" y1="28" x2="19" y2="52"/>
+    <line x1="45" y1="28" x2="45" y2="52"/>
+    <line x1="27" y1="24" x2="27" y2="52"/>
+    <line x1="37" y1="24" x2="37" y2="52"/>
+  `),
+  shoulders: svg(`
+    <circle cx="32" cy="12" r="6"/>
+    <line x1="32" y1="18" x2="32" y2="40"/>
+    <line x1="32" y1="22" x2="12" y2="22"/>
+    <line x1="32" y1="22" x2="52" y2="22"/>
+    <line x1="32" y1="40" x2="25" y2="58"/>
+    <line x1="32" y1="40" x2="39" y2="58"/>
+    <path d="M6 16 A8 8 0 1 0 6 28" stroke="${ACCENT}" stroke-width="3"/>
+    <path d="M58 16 A8 8 0 1 1 58 28" stroke="${ACCENT}" stroke-width="3"/>
+  `),
+  hips: svg(`
+    <circle cx="32" cy="12" r="6"/>
+    <line x1="32" y1="18" x2="32" y2="38"/>
+    <line x1="32" y1="20" x2="20" y2="24"/><line x1="20" y1="24" x2="27" y2="33"/>
+    <line x1="32" y1="20" x2="44" y2="24"/><line x1="44" y1="24" x2="37" y2="33"/>
+    <line x1="32" y1="38" x2="25" y2="58"/>
+    <line x1="32" y1="38" x2="39" y2="58"/>
+    <ellipse cx="32" cy="42" rx="13" ry="6" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="3 4"/>
+  `),
+  ankle: svg(`
+    <circle cx="14" cy="12" r="6"/>
+    <line x1="14" y1="18" x2="14" y2="38"/>
+    <line x1="14" y1="21" x2="6" y2="33"/>
+    <line x1="14" y1="21" x2="22" y2="33"/>
+    <line x1="14" y1="38" x2="10" y2="58"/>
+    <line x1="14" y1="38" x2="26" y2="46"/><line x1="26" y1="46" x2="36" y2="53"/>
+    <line x1="50" y1="6" x2="50" y2="60" stroke-width="3"/>
+    <path d="M40 50 A6 6 0 1 0 40 58" stroke="${ACCENT}" stroke-width="3"/>
+  `),
+  lunge_twist: svg(`
+    <circle cx="30" cy="11" r="6"/>
+    <line x1="30" y1="17" x2="30" y2="34"/>
+    <line x1="30" y1="34" x2="20" y2="46"/><line x1="20" y1="46" x2="16" y2="58"/>
+    <line x1="30" y1="34" x2="46" y2="50"/><line x1="46" y1="50" x2="54" y2="58"/>
+    <line x1="30" y1="18" x2="18" y2="30"/><line x1="18" y1="30" x2="15" y2="42"/>
+    <line x1="30" y1="18" x2="42" y2="8"/><line x1="42" y1="8" x2="50" y2="2"/>
+  `),
+  shoulder_rotation: svg(`
+    <circle cx="32" cy="12" r="6"/>
+    <line x1="32" y1="18" x2="32" y2="40"/>
+    <line x1="32" y1="22" x2="20" y2="30"/>
+    <line x1="20" y1="30" x2="34" y2="34"/>
+    <line x1="32" y1="22" x2="44" y2="36"/>
+    <line x1="32" y1="40" x2="25" y2="58"/>
+    <line x1="32" y1="40" x2="39" y2="58"/>
+    <line x1="6" y1="34" x2="20" y2="30" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="2 4"/>
+    <path d="M34 34 l5 -2 l-2 5" stroke="${ACCENT}" stroke-width="3"/>
+  `),
+  squat: svg(`
+    <circle cx="32" cy="10" r="6"/>
+    <line x1="32" y1="16" x2="32" y2="32"/>
+    <line x1="32" y1="32" x2="18" y2="40"/><line x1="18" y1="40" x2="15" y2="58"/>
+    <line x1="32" y1="32" x2="46" y2="40"/><line x1="46" y1="40" x2="49" y2="58"/>
+    <line x1="32" y1="20" x2="26" y2="26"/>
+    <line x1="32" y1="20" x2="38" y2="26"/>
+    <circle cx="32" cy="27" r="4" fill="${ACCENT}" stroke="none"/>
+  `),
+  rdl: svg(`
+    <circle cx="15" cy="17" r="6"/>
+    <line x1="17" y1="22" x2="40" y2="42"/>
+    <line x1="40" y1="42" x2="36" y2="58"/>
+    <line x1="40" y1="42" x2="46" y2="58"/>
+    <line x1="20" y1="27" x2="18" y2="48"/>
+    <line x1="24" y1="29" x2="22" y2="48"/>
+    <circle cx="18" cy="50" r="4" fill="${ACCENT}" stroke="none"/>
+    <circle cx="22" cy="50" r="4" fill="${ACCENT}" stroke="none"/>
+  `),
+  plank: svg(`
+    <circle cx="10" cy="32" r="5"/>
+    <line x1="15" y1="32" x2="48" y2="32"/>
+    <line x1="15" y1="32" x2="15" y2="46"/>
+    <line x1="10" y1="46" x2="20" y2="46"/>
+    <line x1="48" y1="32" x2="55" y2="42"/>
+    <line x1="6" y1="48" x2="58" y2="48" stroke="#B9D4CF" stroke-width="2" stroke-dasharray="2 3"/>
+  `),
+  birddog: svg(`
+    <circle cx="12" cy="28" r="5"/>
+    <line x1="17" y1="30" x2="40" y2="30"/>
+    <line x1="20" y1="30" x2="20" y2="50"/>
+    <line x1="38" y1="30" x2="38" y2="50"/>
+    <line x1="17" y1="30" x2="6" y2="18"/>
+    <line x1="40" y1="30" x2="54" y2="42"/>
+  `),
+  balance: svg(`
+    <circle cx="32" cy="12" r="6"/>
+    <line x1="32" y1="18" x2="32" y2="38"/>
+    <line x1="32" y1="22" x2="18" y2="17"/>
+    <line x1="32" y1="22" x2="46" y2="17"/>
+    <line x1="32" y1="38" x2="30" y2="58"/>
+    <line x1="32" y1="38" x2="40" y2="46"/><line x1="40" y1="46" x2="36" y2="54"/>
+  `),
+  row: svg(`
+    <circle cx="32" cy="12" r="6"/>
+    <line x1="32" y1="18" x2="32" y2="40"/>
+    <line x1="32" y1="22" x2="18" y2="25"/><line x1="18" y1="25" x2="27" y2="30"/>
+    <line x1="32" y1="22" x2="46" y2="25"/><line x1="46" y1="25" x2="37" y2="30"/>
+    <line x1="27" y1="30" x2="32" y2="52" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="2 4"/>
+    <line x1="37" y1="30" x2="32" y2="52" stroke="${ACCENT}" stroke-width="3" stroke-dasharray="2 4"/>
+    <line x1="32" y1="40" x2="25" y2="58"/>
+    <line x1="32" y1="40" x2="39" y2="58"/>
+  `),
+  sleep: svg(`<path d="M40 14 A18 18 0 1 0 46 46 A13 13 0 0 1 40 14 Z" fill="${STROKE}" stroke="none"/>`),
+  breathe: svg(`<circle cx="32" cy="32" r="14" stroke-dasharray="4 5"/><circle cx="32" cy="32" r="4" fill="${ACCENT}" stroke="none"/>`),
+  check: svg(`<rect x="14" y="14" width="36" height="36" rx="6"/><path d="M22 32 l8 8 l14 -16" stroke="${ACCENT}" stroke-width="5"/>`),
+  medical: svg(`<rect x="26" y="10" width="12" height="44" rx="3"/><rect x="10" y="26" width="44" height="12" rx="3"/>`)
+};
+document.querySelectorAll('.pose[data-pose]').forEach(el => {
+  const key = el.dataset.pose;
+  if (POSES[key]) el.innerHTML = POSES[key];
+});
+
+// ---------- Tabs ----------
 const tabBtns = document.querySelectorAll('.tab-btn');
 const panels = document.querySelectorAll('.panel');
 tabBtns.forEach(btn => {
@@ -10,58 +148,125 @@ tabBtns.forEach(btn => {
   });
 });
 
-// --- Storage helpers ---
+// ---------- Storage helpers ----------
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v === null ? d : v; } catch { return d; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
-const DAYS = ['L','M','M','J','V','S','D'];
-const todayIdx = () => { const d = new Date().getDay(); return d === 0 ? 6 : d - 1; };
-const weekKey = () => {
+const pad = n => String(n).padStart(2, '0');
+const toKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const todayKey = () => toKey(new Date());
+function mondayOfThisWeek(){
   const d = new Date();
-  const onejan = new Date(d.getFullYear(), 0, 1);
-  const week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-  return d.getFullYear() + '-w' + week;
-};
+  const day = d.getDay() === 0 ? 7 : d.getDay();
+  d.setDate(d.getDate() - (day - 1));
+  d.setHours(0,0,0,0);
+  return d;
+}
+function weekDates(){
+  const mon = mondayOfThisWeek();
+  return Array.from({length:7}, (_,i) => { const d = new Date(mon); d.setDate(mon.getDate()+i); return d; });
+}
 
-function buildWeekGrid(containerId, storeKey) {
+// log = { 'YYYY-MM-DD': { mobilite:bool, renfo:bool } }
+let LOG = load('carnet57_log', {});
+const DAY_LABELS = ['L','M','M','J','V','S','D'];
+
+function buildWeekGrid(containerId, field){
   const container = document.getElementById(containerId);
-  const wk = weekKey();
-  let data = load(storeKey, {});
-  if (data.week !== wk) data = { week: wk, days: [false,false,false,false,false,false,false] };
   container.innerHTML = '';
-  DAYS.forEach((label, i) => {
+  const dates = weekDates();
+  const tKey = todayKey();
+  dates.forEach((d, i) => {
+    const key = toKey(d);
+    const on = !!(LOG[key] && LOG[key][field]);
     const el = document.createElement('div');
-    el.className = 'd' + (data.days[i] ? ' on' : '');
-    el.textContent = label;
-    if (i === todayIdx()) el.style.borderColor = '#D6572B';
+    el.className = 'd' + (on ? ' on' : '') + (key === tKey ? ' today' : '');
+    el.textContent = DAY_LABELS[i];
     el.addEventListener('click', () => {
-      data.days[i] = !data.days[i];
-      save(storeKey, data);
-      buildWeekGrid(containerId, storeKey);
+      LOG[key] = LOG[key] || {};
+      LOG[key][field] = !LOG[key][field];
+      save('carnet57_log', LOG);
+      buildWeekGrid(containerId, field);
       updateStats();
     });
     container.appendChild(el);
   });
-  save(storeKey, data);
-  return data;
 }
 
-function updateStats() {
-  const m = load('carnet57_mobilite', { days: [] });
-  const r = load('carnet57_renfo', { days: [] });
-  document.getElementById('stat-mobilite').textContent = (m.days || []).filter(Boolean).length;
-  document.getElementById('stat-renfo').textContent = (r.days || []).filter(Boolean).length;
+function updateStats(){
+  const dates = weekDates().map(toKey);
+  const countField = f => dates.filter(k => LOG[k] && LOG[k][f]).length;
+  document.getElementById('stat-mobilite').textContent = countField('mobilite');
+  document.getElementById('stat-renfo').textContent = countField('renfo');
+  document.getElementById('stat-water').textContent = (load('carnet57_water', {})[todayKey()] || 0);
+
+  // streak (mobilite), consecutive days ending today
+  let streak = 0;
+  let d = new Date();
+  while (true) {
+    const k = toKey(d);
+    if (LOG[k] && LOG[k].mobilite) { streak++; d.setDate(d.getDate() - 1); }
+    else break;
+  }
+  const streakEl = document.getElementById('streak-text');
+  streakEl.textContent = streak === 0
+    ? 'Coche ta mobilité du jour pour démarrer une série'
+    : streak + (streak > 1 ? ' jours de suite en mobilité' : ' jour de suite en mobilité');
 }
 
-buildWeekGrid('week-mobilite', 'carnet57_mobilite');
-buildWeekGrid('week-renfo', 'carnet57_renfo');
-updateStats();
+buildWeekGrid('week-mobilite', 'mobilite');
+buildWeekGrid('week-renfo', 'renfo');
 
-// --- Poids ---
+// ---------- Water tracker ----------
+function buildWater(){
+  const row = document.getElementById('water-row');
+  row.innerHTML = '';
+  const water = load('carnet57_water', {});
+  const n = water[todayKey()] || 0;
+  for (let i = 1; i <= 8; i++) {
+    const cup = document.createElement('div');
+    cup.className = 'water-cup' + (i <= n ? ' on' : '');
+    cup.textContent = '💧';
+    cup.addEventListener('click', () => {
+      const w = load('carnet57_water', {});
+      w[todayKey()] = (w[todayKey()] === i) ? i - 1 : i;
+      save('carnet57_water', w);
+      buildWater();
+      updateStats();
+    });
+    row.appendChild(cup);
+  }
+}
+buildWater();
+
+// ---------- Poids + graphique ----------
 const poidsInput = document.getElementById('poids-input');
 const poidsNote = document.getElementById('poids-note');
-const poidsHistory = load('carnet57_poids', []);
+let poidsHistory = load('carnet57_poids', []);
 poidsInput.value = poidsHistory.length ? poidsHistory[poidsHistory.length - 1].v : '';
+
+function drawChart(){
+  const svgEl = document.getElementById('poids-chart');
+  svgEl.innerHTML = '';
+  const data = poidsHistory.slice(-10);
+  if (data.length < 2) {
+    svgEl.innerHTML = '<text x="10" y="45" font-size="11" fill="#8AA5A2">Ajoute au moins 2 mesures pour voir la courbe</text>';
+    return;
+  }
+  const vals = data.map(p => p.v);
+  const min = Math.min(...vals) - 0.5, max = Math.max(...vals) + 0.5;
+  const w = 300, h = 90, pad = 8;
+  const pts = data.map((p, i) => {
+    const x = pad + (i / (data.length - 1)) * (w - pad*2);
+    const y = h - pad - ((p.v - min) / (max - min)) * (h - pad*2);
+    return [x, y];
+  });
+  const path = pts.map((p,i) => (i===0?'M':'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  svgEl.innerHTML = `<path d="${path}" fill="none" stroke="#0FA2B6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` +
+    pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="#FD9C29"/>`).join('');
+}
+drawChart();
+
 if (poidsHistory.length) poidsNote.textContent = 'Dernière saisie : ' + poidsHistory[poidsHistory.length - 1].d;
 poidsInput.addEventListener('change', () => {
   const v = parseFloat(poidsInput.value);
@@ -69,15 +274,18 @@ poidsInput.addEventListener('change', () => {
     poidsHistory.push({ v, d: new Date().toLocaleDateString('fr-FR') });
     save('carnet57_poids', poidsHistory);
     poidsNote.textContent = 'Enregistré le ' + new Date().toLocaleDateString('fr-FR');
+    drawChart();
   }
 });
 
-// --- Notes ---
+// ---------- Notes ----------
 const notesInput = document.getElementById('notes-input');
 notesInput.value = load('carnet57_notes', '');
 notesInput.addEventListener('input', () => save('carnet57_notes', notesInput.value));
 
-// --- PWA service worker ---
+updateStats();
+
+// ---------- PWA service worker ----------
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(() => {});
