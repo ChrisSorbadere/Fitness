@@ -126,7 +126,65 @@ const POSES = {
   sleep: svg(`<path d="M40 14 A18 18 0 1 0 46 46 A13 13 0 0 1 40 14 Z" fill="${STROKE}" stroke="none"/>`),
   breathe: svg(`<circle cx="32" cy="32" r="14" stroke-dasharray="4 5"/><circle cx="32" cy="32" r="4" fill="${ACCENT}" stroke="none"/>`),
   check: svg(`<rect x="14" y="14" width="36" height="36" rx="6"/><path d="M22 32 l8 8 l14 -16" stroke="${ACCENT}" stroke-width="5"/>`),
-  medical: svg(`<rect x="26" y="10" width="12" height="44" rx="3"/><rect x="10" y="26" width="44" height="12" rx="3"/>`)
+  medical: svg(`<rect x="26" y="10" width="12" height="44" rx="3"/><rect x="10" y="26" width="44" height="12" rx="3"/>`),
+  walk: svg(`
+    <circle cx="20" cy="10" r="6"/>
+    <line x1="20" y1="16" x2="25" y2="33"/>
+    <line x1="25" y1="33" x2="16" y2="41"/><line x1="16" y1="41" x2="13" y2="55"/>
+    <line x1="25" y1="33" x2="35" y2="41"/><line x1="35" y1="41" x2="41" y2="53"/>
+    <line x1="22" y1="20" x2="30" y2="27"/>
+    <line x1="22" y1="20" x2="14" y2="27"/>
+  `),
+  run: svg(`
+    <circle cx="20" cy="10" r="6"/>
+    <line x1="20" y1="16" x2="30" y2="32"/>
+    <line x1="30" y1="32" x2="40" y2="28"/><line x1="40" y1="28" x2="46" y2="18"/>
+    <line x1="30" y1="32" x2="22" y2="42"/><line x1="22" y1="42" x2="28" y2="55"/>
+    <line x1="24" y1="20" x2="14" y2="14"/><line x1="14" y1="14" x2="8" y2="20"/>
+    <line x1="26" y1="22" x2="34" y2="18"/><line x1="34" y1="18" x2="40" y2="22"/>
+  `),
+  stairs: svg(`
+    <path d="M6 56 L6 46 L18 46 L18 36 L30 36 L30 26 L46 26"/>
+    <path d="M40 20 L46 26 L40 32" />
+  `),
+  chair_squat: svg(`
+    <line x1="14" y1="40" x2="38" y2="40" stroke-width="3.5"/>
+    <line x1="14" y1="40" x2="14" y2="56" stroke-width="3.5"/>
+    <line x1="14" y1="40" x2="14" y2="20" stroke-width="3.5"/>
+    <circle cx="42" cy="10" r="6"/>
+    <line x1="42" y1="16" x2="42" y2="30"/>
+    <line x1="42" y1="20" x2="52" y2="17"/>
+    <line x1="42" y1="30" x2="30" y2="35"/><line x1="30" y1="35" x2="32" y2="52"/>
+  `),
+  chair_legraise: svg(`
+    <line x1="8" y1="38" x2="32" y2="38" stroke-width="3.5"/>
+    <line x1="8" y1="38" x2="8" y2="56" stroke-width="3.5"/>
+    <line x1="8" y1="38" x2="8" y2="18" stroke-width="3.5"/>
+    <circle cx="24" cy="13" r="6"/>
+    <line x1="23" y1="19" x2="21" y2="38"/>
+    <line x1="21" y1="38" x2="20" y2="54"/>
+    <line x1="21" y1="38" x2="40" y2="30"/><line x1="40" y1="30" x2="52" y2="34"/>
+    <line x1="23" y1="21" x2="34" y2="33"/>
+    <path d="M34 33 l4 2 l-1 -4.5" stroke-width="3"/>
+  `),
+  chair_dip: svg(`
+    <line x1="4" y1="30" x2="18" y2="30" stroke-width="3.5"/>
+    <line x1="4" y1="30" x2="4" y2="46" stroke-width="3.5"/>
+    <circle cx="30" cy="14" r="6"/>
+    <line x1="29" y1="20" x2="34" y2="34"/>
+    <line x1="16" y1="30" x2="29" y2="24"/>
+    <line x1="34" y1="34" x2="54" y2="40"/><line x1="54" y1="40" x2="60" y2="50"/>
+  `),
+  chair_balance: svg(`
+    <line x1="14" y1="50" x2="30" y2="50" stroke-width="3.5"/>
+    <line x1="30" y1="50" x2="30" y2="60" stroke-width="3.5"/>
+    <line x1="14" y1="50" x2="14" y2="14" stroke-width="3.5"/>
+    <circle cx="42" cy="12" r="6"/>
+    <line x1="42" y1="18" x2="42" y2="38"/>
+    <line x1="42" y1="22" x2="20" y2="27"/>
+    <line x1="42" y1="38" x2="37" y2="52"/><path d="M34 55 q3 -3 6 0"/>
+    <line x1="42" y1="38" x2="47" y2="52"/><path d="M44 55 q3 -3 6 0"/>
+  `),
 };
 document.querySelectorAll('.pose[data-pose]').forEach(el => {
   const key = el.dataset.pose;
