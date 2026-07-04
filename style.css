@@ -179,6 +179,17 @@ main{
 .pose.c-yellow{background:#FDF3D9;}
 .pose.c-blue{background:#DCEEF6;}
 
+.pose-pair{display:flex; gap:5px; flex-shrink:0;}
+.pose-pair .pose{width:48px; height:48px; border-radius:12px; position:relative;}
+.pose-pair .pose::after{
+  content:attr(data-step);
+  position:absolute; top:-4px; left:-4px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--navy); color:#fff;
+  font-family:'Fredoka',sans-serif; font-size:8.5px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+}
+
 .block-title{
   font-family:'Fredoka', sans-serif;
   font-size:13px;
