@@ -1,0 +1,12 @@
+{
+  "name": "Carnet 57 — Mobilité & Nutrition",
+  "short_name": "Carnet 57",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1B2118",
+  "theme_color": "#1B2118",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
