@@ -170,7 +170,7 @@ main{
 }
 .card ul{margin:6px 0 0; padding-left:18px; font-size:13px; line-height:1.5; color:#3E5D5A;}
 
-/* --- BLOC D'ILLUSTRATION AVEC RENDU AUTO COHÉRENT --- */
+/* --- BLOC VISUEL ADAPTATIF ET PROPRE (IMAGES À LA RACINE) --- */
 .exercise-illustration {
   width: 100%;
   aspect-ratio: 1.45;
@@ -182,7 +182,7 @@ main{
   border: 1px solid var(--line);
 }
 
-/* Lot 1 - Fichiers exercices découpés un par un */
+/* Lot 1 - Exercices physiques (Fichiers locaux directs) */
 .img-01 { background-image: url('01.jpg'); }
 .img-02 { background-image: url('02.jpg'); }
 .img-03 { background-image: url('03.jpg'); }
@@ -205,7 +205,7 @@ main{
 .img-20 { background-image: url('20.jpg'); }
 .img-21 { background-image: url('21.jpg'); }
 
-/* Lot 2 - Fichiers de structure et leviers */
+/* Lot 2 - Conceptuel / Structurel avec le même personnage */
 .img-23 { background-image: url('23.jpg'); }
 .img-24 { background-image: url('24.jpg'); }
 .img-25 { background-image: url('25.jpg'); }
