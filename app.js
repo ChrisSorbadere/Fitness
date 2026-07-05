@@ -1,4 +1,4 @@
-// ---------- Tabs ----------
+// ---------- Tabs Navigation ----------
 const tabBtns = document.querySelectorAll('.tab-btn');
 const panels = document.querySelectorAll('.panel');
 tabBtns.forEach(btn => {
@@ -7,16 +7,18 @@ tabBtns.forEach(btn => {
     panels.forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    window.scrollTo({ top: 0 });
   });
 });
 
-// ---------- Storage helpers ----------
+// ---------- Storage Helpers ----------
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v === null ? d : v; } catch { return d; } };
 const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 
 const pad = n => String(n).padStart(2, '0');
 const toKey = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const todayKey = () => toKey(new Date());
+
 function mondayOfThisWeek(){
   const d = new Date();
   const day = d.getDay() === 0 ? 7 : d.getDay();
@@ -24,12 +26,12 @@ function mondayOfThisWeek(){
   d.setHours(0,0,0,0);
   return d;
 }
+
 function weekDates(){
   const mon = mondayOfThisWeek();
   return Array.from({length:7}, (_,i) => { const d = new Date(mon); d.setDate(mon.getDate()+i); return d; });
 }
 
-// log = { 'YYYY-MM-DD': { mobilite:bool, renfo:bool, cardio:bool, rpe:num, douleur:num } }
 let LOG = load('carnet57_log', {});
 const DAY_LABELS = ['L','M','M','J','V','S','D'];
 
@@ -59,12 +61,13 @@ function buildWeekGrid(containerId, field){
 function updateStats(){
   const dates = weekDates().map(toKey);
   const countField = f => dates.filter(k => LOG[k] && LOG[k][f]).length;
-  document.getElementById('stat-mobilite').textContent = countField('mobilite');
-  document.getElementById('stat-renfo').textContent = countField('renfo');
-  document.getElementById('stat-cardio').textContent = countField('cardio');
-  document.getElementById('stat-water').textContent = (load('carnet57_water', {})[todayKey()] || 0);
+  
+  const mEl = document.getElementById('stat-mobilite'); if (mEl) mEl.textContent = countField('mobilite');
+  const rEl = document.getElementById('stat-renfo'); if (rEl) rEl.textContent = countField('renfo');
+  const cEl = document.getElementById('stat-cardio'); if (cEl) cEl.textContent = countField('cardio');
+  const wEl = document.getElementById('stat-water'); if (wEl) wEl.textContent = (load('carnet57_water', {})[todayKey()] || 0);
 
-  // streak (mobilite), consecutive days ending today
+  // Streak (consecutive days)
   let streak = 0;
   let d = new Date();
   while (true) {
@@ -73,11 +76,13 @@ function updateStats(){
     else break;
   }
   const streakEl = document.getElementById('streak-text');
-  streakEl.textContent = streak === 0
-    ? 'Coche ta mobilité du jour pour démarrer une série'
-    : streak + (streak > 1 ? ' jours de suite en mobilité' : ' jour de suite en mobilité');
+  if (streakEl) {
+    streakEl.textContent = streak === 0
+      ? 'Coche ta mobilité du jour pour démarrer une série'
+      : streak + (streak > 1 ? ' jours de suite en mobilité' : ' jour de suite en mobilité');
+  }
 
-  // régularité du mois en cours (mobilité)
+  // Monthly regularity ratio
   const now = new Date();
   const daysSoFar = now.getDate();
   let doneThisMonth = 0;
@@ -95,11 +100,11 @@ buildWeekGrid('week-mobilite', 'mobilite');
 buildWeekGrid('week-renfo', 'renfo');
 buildWeekGrid('week-cardio', 'cardio');
 
-// ---------- Poids + graphique ----------
+// ---------- Weight Analytics & Charts ----------
 const poidsInput = document.getElementById('poids-input');
 const poidsNote = document.getElementById('poids-note');
 let poidsHistory = load('carnet57_poids', []);
-poidsInput.value = poidsHistory.length ? poidsHistory[poidsHistory.length - 1].v : '';
+if (poidsInput) poidsInput.value = poidsHistory.length ? poidsHistory[poidsHistory.length - 1].v : '';
 
 function drawChart(){
   const svgEl = document.getElementById('poids-chart');
@@ -124,25 +129,29 @@ function drawChart(){
 }
 drawChart();
 
-if (poidsHistory.length) poidsNote.textContent = 'Dernière saisie : ' + poidsHistory[poidsHistory.length - 1].d;
-poidsInput.addEventListener('change', () => {
-  const v = parseFloat(poidsInput.value);
-  if (!isNaN(v)) {
-    poidsHistory.push({ v, d: new Date().toLocaleDateString('fr-FR') });
-    save('carnet57_poids', poidsHistory);
-    poidsNote.textContent = 'Enregistré le ' + new Date().toLocaleDateString('fr-FR');
-    drawChart();
-  }
-});
+if (poidsHistory.length && poidsNote) poidsNote.textContent = 'Dernière saisie : ' + poidsHistory[poidsHistory.length - 1].d;
+if (poidsInput) {
+  poidsInput.addEventListener('change', () => {
+    const v = parseFloat(poidsInput.value);
+    if (!isNaN(v)) {
+      poidsHistory.push({ v, d: new Date().toLocaleDateString('fr-FR') });
+      save('carnet57_poids', poidsHistory);
+      poidsNote.textContent = 'Enregistré le ' + new Date().toLocaleDateString('fr-FR');
+      drawChart();
+    }
+  });
+}
 
-// ---------- Notes ----------
+// ---------- General Logs ----------
 const notesInput = document.getElementById('notes-input');
-notesInput.value = load('carnet57_notes', '');
-notesInput.addEventListener('input', () => save('carnet57_notes', notesInput.value));
+if (notesInput) {
+  notesInput.value = load('carnet57_notes', '');
+  notesInput.addEventListener('input', () => save('carnet57_notes', notesInput.value));
+}
 
 updateStats();
 
-// ---------- Citations du jour ----------
+// ---------- Daily Wisdom System ----------
 const QUOTES = [
   "Un jour sans mobilité, ce sont des articulations qui rouillent un peu plus vite.",
   "10 minutes aujourd'hui valent mieux qu'une heure qu'on ne fera jamais.",
@@ -156,9 +165,10 @@ const QUOTES = [
   "Une routine simple et tenue vaut mieux qu'un programme parfait abandonné."
 ];
 function dayOfYear(d){ const start = new Date(d.getFullYear(),0,0); return Math.floor((d - start) / 86400000); }
-document.getElementById('quote-banner').textContent = QUOTES[dayOfYear(new Date()) % QUOTES.length];
+const qB = document.getElementById('quote-banner');
+if (qB) qB.textContent = QUOTES[dayOfYear(new Date()) % QUOTES.length];
 
-// ---------- Toast ----------
+// ---------- Feedback Triggers ----------
 const ENCOURAGEMENTS = ['Bien joué 💪', 'C\'est noté !', 'Un pas de plus 👣', 'Bravo, continue comme ça', 'Enregistré ✓'];
 let toastTimer;
 function showToast(msg){
@@ -171,7 +181,7 @@ function showToast(msg){
 }
 function randomEncouragement(){ return ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)]; }
 
-// ---------- Dashboard "Aujourd'hui" ----------
+// ---------- Synchronization Framework ----------
 const todayMobiliteCb = document.getElementById('today-mobilite');
 const todayRenfoCb = document.getElementById('today-renfo');
 const todayCardioCb = document.getElementById('today-cardio');
@@ -181,45 +191,54 @@ const rpeValue = document.getElementById('rpe-value');
 
 function syncTodayCheckboxes(){
   const t = LOG[todayKey()] || {};
-  todayMobiliteCb.checked = !!t.mobilite;
-  todayRenfoCb.checked = !!t.renfo;
-  todayCardioCb.checked = !!t.cardio;
-  rpeBlock.style.display = todayRenfoCb.checked ? 'block' : 'none';
-  rpeInput.value = t.rpe || 7;
-  rpeValue.textContent = t.rpe || '-';
+  if (todayMobiliteCb) todayMobiliteCb.checked = !!t.mobilite;
+  if (todayRenfoCb) todayRenfoCb.checked = !!t.renfo;
+  if (todayCardioCb) todayCardioCb.checked = !!t.cardio;
+  if (rpeBlock) rpeBlock.style.display = (todayRenfoCb && todayRenfoCb.checked) ? 'block' : 'none';
+  if (rpeInput) rpeInput.value = t.rpe || 7;
+  if (rpeValue) rpeValue.textContent = t.rpe || '-';
 }
 syncTodayCheckboxes();
-todayMobiliteCb.addEventListener('change', () => {
-  LOG[todayKey()] = LOG[todayKey()] || {};
-  LOG[todayKey()].mobilite = todayMobiliteCb.checked;
-  save('carnet57_log', LOG);
-  buildWeekGrid('week-mobilite', 'mobilite');
-  updateStats();
-  if (todayMobiliteCb.checked) showToast(randomEncouragement());
-});
-todayRenfoCb.addEventListener('change', () => {
-  LOG[todayKey()] = LOG[todayKey()] || {};
-  LOG[todayKey()].renfo = todayRenfoCb.checked;
-  save('carnet57_log', LOG);
-  buildWeekGrid('week-renfo', 'renfo');
-  updateStats();
-  rpeBlock.style.display = todayRenfoCb.checked ? 'block' : 'none';
-  if (todayRenfoCb.checked) showToast(randomEncouragement());
-});
-todayCardioCb.addEventListener('change', () => {
-  LOG[todayKey()] = LOG[todayKey()] || {};
-  LOG[todayKey()].cardio = todayCardioCb.checked;
-  save('carnet57_log', LOG);
-  buildWeekGrid('week-cardio', 'cardio');
-  updateStats();
-  if (todayCardioCb.checked) showToast(randomEncouragement());
-});
-rpeInput.addEventListener('input', () => {
-  rpeValue.textContent = rpeInput.value;
-  LOG[todayKey()] = LOG[todayKey()] || {};
-  LOG[todayKey()].rpe = parseInt(rpeInput.value, 10);
-  save('carnet57_log', LOG);
-});
+
+if (todayMobiliteCb) {
+  todayMobiliteCb.addEventListener('change', () => {
+    LOG[todayKey()] = LOG[todayKey()] || {};
+    LOG[todayKey()].mobilite = todayMobiliteCb.checked;
+    save('carnet57_log', LOG);
+    buildWeekGrid('week-mobilite', 'mobilite');
+    updateStats();
+    if (todayMobiliteCb.checked) showToast(randomEncouragement());
+  });
+}
+if (todayRenfoCb) {
+  todayRenfoCb.addEventListener('change', () => {
+    LOG[todayKey()] = LOG[todayKey()] || {};
+    LOG[todayKey()].renfo = todayRenfoCb.checked;
+    save('carnet57_log', LOG);
+    buildWeekGrid('week-renfo', 'renfo');
+    updateStats();
+    if (rpeBlock) rpeBlock.style.display = todayRenfoCb.checked ? 'block' : 'none';
+    if (todayRenfoCb.checked) showToast(randomEncouragement());
+  });
+}
+if (todayCardioCb) {
+  todayCardioCb.addEventListener('change', () => {
+    LOG[todayKey()] = LOG[todayKey()] || {};
+    LOG[todayKey()].cardio = todayCardioCb.checked;
+    save('carnet57_log', LOG);
+    buildWeekGrid('week-cardio', 'cardio');
+    updateStats();
+    if (todayCardioCb.checked) showToast(randomEncouragement());
+  });
+}
+if (rpeInput) {
+  rpeInput.addEventListener('input', () => {
+    if (rpeValue) rpeValue.textContent = rpeInput.value;
+    LOG[todayKey()] = LOG[todayKey()] || {};
+    LOG[todayKey()].rpe = parseInt(rpeInput.value, 10);
+    save('carnet57_log', LOG);
+  });
+}
 
 function buildWater(containerId){
   const row = document.getElementById(containerId);
@@ -245,20 +264,17 @@ function buildWater(containerId){
 buildWater('water-row');
 buildWater('water-row-today');
 
-// ---------- Records & badges ----------
+// ---------- Achievements & Records Logging ----------
 const BADGES_STREAK = [
   { n: 3, label: '🔥 3 jours' },
   { n: 7, label: '🥉 7 jours' },
   { n: 14, label: '🥈 14 jours' },
-  { n: 30, label: '🥇 30 jours' },
-  { n: 60, label: '🏆 60 jours' },
-  { n: 100, label: '💎 100 jours' }
+  { n: 30, label: '🥇 30 jours' }
 ];
 const BADGES_RENFO = [
   { n: 10, label: '🏋️ 10 séances' },
   { n: 25, label: '🏋️ 25 séances' },
-  { n: 50, label: '🏋️ 50 séances' },
-  { n: 100, label: '🏋️ 100 séances' }
+  { n: 50, label: '🏋️ 50 séances' }
 ];
 
 function computeLifetime(){
@@ -279,9 +295,9 @@ function computeLifetime(){
 
 function updateRecordsAndBadges(){
   const { totalMobilite, totalRenfo, maxStreak } = computeLifetime();
-  document.getElementById('stat-totalmobilite').textContent = totalMobilite;
-  document.getElementById('stat-totalrenfo').textContent = totalRenfo;
-  document.getElementById('stat-maxstreak').textContent = maxStreak;
+  const tmEl = document.getElementById('stat-totalmobilite'); if (tmEl) tmEl.textContent = totalMobilite;
+  const trEl = document.getElementById('stat-totalrenfo'); if (trEl) trEl.textContent = totalRenfo;
+  const msEl = document.getElementById('stat-maxstreak'); if (msEl) msEl.textContent = maxStreak;
 
   const row = document.getElementById('badges-row');
   if (!row) return;
@@ -305,39 +321,46 @@ const _origUpdateStats = updateStats;
 updateStats = function(){
   _origUpdateStats();
   const streakEl2 = document.getElementById('streak-text-today');
-  if (streakEl2) streakEl2.textContent = document.getElementById('streak-text').textContent;
+  if (streakEl2 && document.getElementById('streak-text')) streakEl2.textContent = document.getElementById('streak-text').textContent;
   updateRecordsAndBadges();
 };
 updateStats();
 
-// ---------- Export / import ----------
-document.getElementById('btn-export').addEventListener('click', () => {
-  const data = {};
-  Object.keys(localStorage).filter(k => k.startsWith('carnet57_')).forEach(k => data[k] = localStorage.getItem(k));
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'fitness57-sauvegarde-' + todayKey() + '.json';
-  a.click();
-});
-document.getElementById('import-file').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const data = JSON.parse(reader.result);
-      Object.keys(data).forEach(k => localStorage.setItem(k, data[k]));
-      document.getElementById('import-note').textContent = 'Import réussi. Rechargement...';
-      setTimeout(() => location.reload(), 800);
-    } catch {
-      document.getElementById('import-note').textContent = 'Fichier invalide.';
-    }
-  };
-  reader.readAsText(file);
-});
+// ---------- Backup Interfacing ----------
+const expBtn = document.getElementById('btn-export');
+if (expBtn) {
+  expBtn.addEventListener('click', () => {
+    const data = {};
+    Object.keys(localStorage).filter(k => k.startsWith('carnet57_')).forEach(k => data[k] = localStorage.getItem(k));
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'fitness57-sauvegarde-' + todayKey() + '.json';
+    a.click();
+  });
+}
 
-// ---------- Douleur / raideur du jour ----------
+const impFile = document.getElementById('import-file');
+if (impFile) {
+  impFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        Object.keys(data).forEach(k => localStorage.setItem(k, data[k]));
+        document.getElementById('import-note').textContent = 'Import réussi. Rechargement...';
+        setTimeout(() => location.reload(), 800);
+      } catch {
+        document.getElementById('import-note').textContent = 'Fichier invalide.';
+      }
+    };
+    reader.readAsText(file);
+  });
+}
+
+// ---------- Bio-Symptom Tracker ----------
 const PAIN_EMOJIS = ['😀','🙂','😐','🙁','😣'];
 function buildPainRow(){
   const row = document.getElementById('pain-row');
@@ -358,6 +381,7 @@ function buildPainRow(){
     row.appendChild(cell);
   });
 }
+
 function drawPainChart(){
   const svgEl = document.getElementById('pain-chart');
   if (!svgEl) return;
@@ -380,7 +404,7 @@ function drawPainChart(){
 buildPainRow();
 drawPainChart();
 
-// ---------- Semaine du programme (Progression dynamique) ----------
+// ---------- Micro-Periodization Module ----------
 const PHASES = [
   { min: 1, max: 4, phase: 1, label: 'Fondations' },
   { min: 5, max: 8, phase: 2, label: 'Consolidation' },
@@ -404,8 +428,6 @@ function buildWeekPicker(){
     });
     container.appendChild(btn);
   }
-  const p = phaseForWeek(current);
-  document.getElementById('week-picker-note').textContent = `Semaine ${current}/12 · Phase : ${p.label}`;
 }
 function updatePhaseDisplay(){
   const current = load('carnet57_week', 1);
@@ -421,7 +443,7 @@ function updatePhaseDisplay(){
 buildWeekPicker();
 updatePhaseDisplay();
 
-// ---------- PWA service worker ----------
+// ---------- Progressive Web App Setup ----------
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js').catch(() => {});
