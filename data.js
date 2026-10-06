@@ -116,6 +116,9 @@ const POSES = {
   breathe_b: pic(`${head(32,22,6)}<path d="M18 50 Q18 32 32 32 Q46 32 46 50"/><circle cx="32" cy="22" r="20" stroke="${A}" stroke-width="2" stroke-dasharray="3 4"/>`)
 };
 
+/* ---------- Illustrations (planche générée pour Chris) ---------- */
+const fig = k => (typeof IMG_DATA !== 'undefined' && IMG_DATA[k]) ? `<img src="${IMG_DATA[k]}" alt="" draggable="false">` : POSES[k];
+
 /* ---------- Exercices ---------- */
 // type: reps | time | free | breathe ; side: true = par côté
 const EXERCISES = {
@@ -159,9 +162,9 @@ const EXERCISES = {
   balance: { name: 'Équilibre sur une jambe', cat: 'renfo', poses: ['balance_a','balance_b'], type: 'time', secs: 30, side: true, rest: 20,
     how: 'Debout près d’un appui. Lève un pied et tiens. Quand c’est facile : yeux fermés, ou sur un coussin.',
     cues: ['Fixe un point devant toi', 'Genou d’appui légèrement souple'], warn: 'Toujours un mur ou une chaise à portée de main.', muscles: 'Chevilles, stabilisateurs' },
-  row: { name: 'Tirage assis à la bande', cat: 'renfo', poses: ['row_a','row_b'], type: 'reps', reps: 15, rest: 45,
-    how: 'Assis, jambes tendues, bande passée sous les pieds. Tire les poignées vers le nombril en serrant les omoplates, coudes près du corps.',
-    cues: ['Dos droit, buste immobile', 'Serre les omoplates 1 s'], warn: 'Ne te penche pas en arrière pour tirer.', muscles: 'Haut du dos, posture' },
+  row: { name: 'Tirage à la bande', cat: 'renfo', poses: ['row_a','row_b'], type: 'reps', reps: 15, rest: 45,
+    how: 'Debout, bande fixée devant toi à hauteur de poitrine, bras tendus. Tire les poignées vers la poitrine en serrant les omoplates, coudes près du corps, puis reviens lentement.',
+    cues: ['Buste droit et immobile', 'Serre les omoplates 1 s'], warn: 'Ne te penche pas en arrière pour tirer.', muscles: 'Haut du dos, posture' },
 
   chair_squat: { name: 'Lever de chaise', cat: 'maison', poses: ['chair_squat_a','chair_squat_b'], type: 'reps', reps: 12, rest: 45,
     how: 'Assis au bord d’une chaise stable, pieds à plat. Lève-toi sans les mains, puis rassieds-toi lentement en 3 secondes.',
@@ -185,7 +188,7 @@ const EXERCISES = {
   walk: { name: 'Marche rapide', cat: 'cardio', poses: ['walk_a','walk_b'], type: 'free', secs: 1800,
     how: 'Allure soutenue : tu respires plus vite mais peux encore parler par phrases courtes.',
     cues: ['Bras qui balancent', 'Pas dynamiques, posture droite'], warn: 'Si tu ne peux plus finir une phrase, ralentis.', muscles: 'Cœur, jambes' },
-  jog: { name: 'Trot léger', cat: 'cardio', poses: ['walk_a','run_b'], type: 'time', secs: 60,
+  jog: { name: 'Trot léger', cat: 'cardio', poses: ['run_a','run_b'], type: 'time', secs: 60,
     how: 'Course très lente, presque une marche rapide qui décolle.', cues: ['Petites foulées', 'Atterrissage souple'], warn: 'Arrête si douleur articulaire.', muscles: 'Cœur, jambes' },
   walk_easy: { name: 'Marche de récupération', cat: 'cardio', poses: ['walk_a','walk_b'], type: 'time', secs: 120,
     how: 'Marche tranquille pour faire redescendre le souffle.', cues: ['Respire profondément'], warn: '', muscles: 'Récupération' },

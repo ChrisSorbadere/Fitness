@@ -1,4 +1,4 @@
-/* Fitness 57 — v2.0 — logique de l'application */
+/* Fitness 57 — v2.1 — logique de l'application */
 'use strict';
 
 /* =========================================================
@@ -293,7 +293,7 @@ function sessCard(key) {
 function exLine(id, extra = '') {
   const e = EXERCISES[id];
   return `<button class="ex" data-act="exo" data-id="${id}">
-    <div class="thumbs"><div class="thumb">${POSES[e.poses[0]]}</div><div class="thumb">${POSES[e.poses[1]]}</div></div>
+    <div class="thumbs"><div class="thumb">${fig(e.poses[0])}</div><div class="thumb">${fig(e.poses[1])}</div></div>
     <div class="grow"><h4>${e.name}</h4><div class="t">${extra || dose(id)}</div></div><span class="chev">›</span></button>`;
 }
 function dose(id, sets) {
@@ -351,7 +351,7 @@ function closeSheet() {
 function sheetExo(id) {
   const e = EXERCISES[id];
   openSheet(`<h2>${e.name}</h2><div class="tiny">${e.muscles}</div>
-    <div class="anim-pose"><div class="f"><span class="s">1</span>${POSES[e.poses[0]]}</div><div class="f"><span class="s">2</span>${POSES[e.poses[1]]}</div></div>
+    <div class="anim-pose"><div class="f"><span class="s">1</span>${fig(e.poses[0])}</div><div class="f"><span class="s">2</span>${fig(e.poses[1])}</div></div>
     <div class="pill-row" style="margin-top:0"><span class="pill">🎯 ${dose(id)}</span>${e.rest ? `<span class="pill">⏸ repos ${e.rest} s</span>` : ''}</div>
     <p class="muted" style="margin-top:12px">${e.how}</p>
     <ul class="cues">${e.cues.map(c => `<li>${c}</li>`).join('')}</ul>
@@ -451,7 +451,7 @@ function drawPlayer() {
     body = `<div class="p-kind rest">${st.label}</div>
       <div class="p-name">${st.prep && ne ? 'Ensuite : ' + ne.name : 'Souffle un peu'}</div>
       <div class="p-big" id="p-time">${fmtTime(PL.paused ? PL.remaining : (PL.endAt - Date.now()) / 1000)}</div>
-      ${ne ? `<div class="p-fig" id="p-fig" style="width:min(44vw,170px)"><div class="a">${POSES[ne.poses[0]]}</div><div class="b">${POSES[ne.poses[1]]}</div></div>` : ''}
+      ${ne ? `<div class="p-fig" id="p-fig" style="width:min(44vw,170px)"><div class="a">${fig(ne.poses[0])}</div><div class="b">${fig(ne.poses[1])}</div></div>` : ''}
       <div class="p-cue">${st.prep && ne ? ne.cues[0] : 'Respire calmement, relâche les épaules.'}</div>`;
     ctrl = `<button class="btn round" data-act="pl-prev" aria-label="Précédent">⏮</button>
       <button class="btn ghost" data-act="pl-add">+15 s</button>
@@ -465,7 +465,7 @@ function drawPlayer() {
     else big = `<div class="p-big" id="p-time">${fmtTime(PL.paused ? PL.remaining : (PL.endAt - Date.now()) / 1000)}</div>${e.side ? '<div class="tiny">moitié du temps par côté</div>' : ''}`;
     body = `<div class="p-kind">${setTxt}</div>
       <div class="p-name">${e.name}</div>
-      ${e.type !== 'breathe' ? `<div class="p-fig" id="p-fig"><div class="a">${POSES[e.poses[0]]}</div><div class="b">${POSES[e.poses[1]]}</div></div>` : ''}
+      ${e.type !== 'breathe' ? `<div class="p-fig" id="p-fig"><div class="a">${fig(e.poses[0])}</div><div class="b">${fig(e.poses[1])}</div></div>` : ''}
       ${big}
       <div class="p-cue" id="p-cue">${e.cues[0]}</div>`;
     if (e.type === 'reps') {
@@ -485,7 +485,7 @@ function drawPlayer() {
   }
   if (st.kind === 'rest') { let f = 0; poseTick = setInterval(() => { const x = $('#p-fig'); if (x) x.classList.toggle('flip'); f++; }, 1600); }
 
-  const nxt = nextWork && st.kind === 'work' ? `<div class="p-next"><div class="thumb">${POSES[EXERCISES[nextWork.id].poses[0]]}</div><div class="grow"><div class="tiny">Ensuite</div><b>${EXERCISES[nextWork.id].name}</b></div></div>` : '';
+  const nxt = nextWork && st.kind === 'work' ? `<div class="p-next"><div class="thumb">${fig(EXERCISES[nextWork.id].poses[0])}</div><div class="grow"><div class="tiny">Ensuite</div><b>${EXERCISES[nextWork.id].name}</b></div></div>` : '';
   $('#player').innerHTML = `
     <div class="p-top"><button class="p-x" data-act="pl-quit" aria-label="Quitter">✕</button><div class="grow">${s.emoji} ${s.name}</div><span class="tiny">${pct}%</span></div>
     <div class="p-bar"><i style="width:${pct}%"></i></div>
@@ -753,7 +753,7 @@ function sheetSettings() {
         <button class="btn ghost block" style="color:var(--red)" data-act="reset">Tout effacer</button>
       </div>
     </div>
-    <p class="tiny" style="text-align:center;margin-top:16px">Fitness 57 · v2.0 · conseils généraux, pas un avis médical</p>`, true);
+    <p class="tiny" style="text-align:center;margin-top:16px">Fitness 57 · v2.1 · conseils généraux, pas un avis médical</p>`, true);
   $('#s-name').addEventListener('change', e => { SET.name = e.target.value.trim(); saveSet(); render(); });
   $('#s-start').addEventListener('change', e => { if (e.target.value) { SET.start = e.target.value; saveSet(); render(); } });
   ['c-mob', 'c-rt', 'c-ct'].forEach(id => { const el = $('#' + id); if (el) el.addEventListener('change', () => { SET.cal[{ 'c-mob': 'mobTime', 'c-rt': 'renfoTime', 'c-ct': 'cardioTime' }[id]] = el.value; saveSet(); }); });

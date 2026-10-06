@@ -1,6 +1,6 @@
 /* Fitness 57 — service worker v2.0 : réseau d'abord, cache en secours hors ligne */
-const CACHE = 'fitness57-v2.0';
-const ASSETS = ['./', './index.html', './style.css', './data.js', './app.js', './manifest.json', './icon-192.png', './icon-512.png'];
+const CACHE = 'fitness57-v2.1';
+const ASSETS = ['./', './index.html', './style.css', './images.js', './data.js', './app.js', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(() => {}));

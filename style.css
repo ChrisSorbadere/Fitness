@@ -157,8 +157,9 @@ main{padding:16px 14px 24px;}
 
 .ex{display:flex; gap:12px; align-items:center; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:10px 12px; margin-bottom:8px; width:100%; text-align:left;}
 .ex .thumbs{display:flex; gap:4px; flex-shrink:0;}
-.thumb{width:46px; height:46px; border-radius:12px; background:var(--card-2); color:var(--ink); padding:4px; display:flex;}
-.thumb svg{width:100%; height:100%;}
+.thumb{width:52px; height:52px; border-radius:12px; background:#fff; color:#123A3F; padding:2px; display:flex; overflow:hidden; border:1px solid var(--line);}
+.thumb svg, .thumb img{width:100%; height:100%; object-fit:contain; display:block;}
+.thumb svg{padding:3px;}
 .ex h4{margin:0; font-size:.95rem; font-weight:600;}
 .ex .t{font-size:.78rem; color:var(--ink-3); font-weight:600; margin-top:2px;}
 .ex .chev{color:var(--ink-3); font-size:1.2rem;}
@@ -175,9 +176,10 @@ main{padding:16px 14px 24px;}
 .sheet h2{margin:0 0 4px; font-size:1.3rem;}
 .sheet .close{position:absolute; right:14px; top:12px; background:var(--card); border:1px solid var(--line); width:34px; height:34px; border-radius:50%; font-size:1rem;}
 .anim-pose{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:14px 0;}
-.anim-pose .f{background:var(--card); border:1px solid var(--line); border-radius:18px; aspect-ratio:1; padding:12px; position:relative; color:var(--ink);}
-.anim-pose .f svg{width:100%; height:100%;}
-.anim-pose .f .s{position:absolute; top:8px; left:8px; width:22px; height:22px; border-radius:50%; background:var(--ink); color:var(--bg); font-size:.75rem; font-weight:700; display:flex; align-items:center; justify-content:center;}
+.anim-pose .f{background:#fff; border:1px solid var(--line); border-radius:18px; aspect-ratio:1; padding:6px; position:relative; color:#123A3F; overflow:hidden;}
+.anim-pose .f svg, .anim-pose .f img{width:100%; height:100%; object-fit:contain; display:block;}
+.anim-pose .f:has(img) .s{display:none;}
+.anim-pose .f .s{position:absolute; top:8px; left:8px; width:22px; height:22px; border-radius:50%; background:#123A3F; color:#fff; font-size:.75rem; font-weight:700; display:flex; align-items:center; justify-content:center;}
 .cues{margin:8px 0 0; padding:0; list-style:none;}
 .cues li{padding:7px 0 7px 26px; position:relative; font-size:.92rem; border-bottom:1px solid var(--line);}
 .cues li::before{content:'✓'; position:absolute; left:4px; color:var(--green); font-weight:700;}
@@ -195,15 +197,16 @@ main{padding:16px 14px 24px;}
 .p-kind.rest{color:var(--purple);}
 .p-name{font-family:'Fredoka',sans-serif; font-size:1.55rem; font-weight:600; margin:4px 0 2px; line-height:1.2;}
 .p-sub{font-size:.95rem; color:var(--ink-2); margin-bottom:6px;}
-.p-fig{width:min(62vw,250px); aspect-ratio:1; color:var(--ink); position:relative; margin:6px 0;}
-.p-fig svg{position:absolute; inset:0; width:100%; height:100%; transition:opacity .45s;}
+.p-fig{width:min(72vw,290px); aspect-ratio:1; color:#123A3F; position:relative; margin:6px 0; background:#fff; border-radius:26px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line);}
+.p-fig > div{position:absolute; inset:0; padding:8px; transition:opacity .45s;}
+.p-fig > div > *{width:100%; height:100%; object-fit:contain; display:block;}
 .p-fig .b{opacity:0;}
 .p-fig.flip .a{opacity:0;} .p-fig.flip .b{opacity:1;}
 .p-big{font-family:'Fredoka',sans-serif; font-size:4.2rem; font-weight:700; line-height:1; letter-spacing:-.02em; font-variant-numeric:tabular-nums;}
 .p-big small{font-size:1.2rem; font-weight:600; color:var(--ink-2); margin-left:4px;}
 .p-cue{font-size:.92rem; color:var(--ink-2); margin-top:8px; min-height:1.3em;}
 .p-next{margin:6px 14px 0; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 12px; display:flex; align-items:center; gap:10px; font-size:.85rem;}
-.p-next .thumb{width:40px; height:40px;}
+.p-next .thumb{width:44px; height:44px;}
 .p-ctrl{display:flex; gap:10px; padding:12px 14px calc(16px + env(safe-area-inset-bottom)); align-items:center;}
 .p-ctrl .btn{flex:1; padding:16px;}
 .p-ctrl .round{flex:0 0 56px; height:56px; border-radius:50%; padding:0; font-size:1.2rem;}
