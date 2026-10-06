@@ -1,4 +1,4 @@
-/* Fitness 57 — v2.1 — logique de l'application */
+/* Fitness 57 — v2.2 — logique de l'application */
 'use strict';
 
 /* =========================================================
@@ -753,7 +753,7 @@ function sheetSettings() {
         <button class="btn ghost block" style="color:var(--red)" data-act="reset">Tout effacer</button>
       </div>
     </div>
-    <p class="tiny" style="text-align:center;margin-top:16px">Fitness 57 · v2.1 · conseils généraux, pas un avis médical</p>`, true);
+    <p class="tiny" style="text-align:center;margin-top:16px">Fitness 57 · v2.2 · conseils généraux, pas un avis médical</p>`, true);
   $('#s-name').addEventListener('change', e => { SET.name = e.target.value.trim(); saveSet(); render(); });
   $('#s-start').addEventListener('change', e => { if (e.target.value) { SET.start = e.target.value; saveSet(); render(); } });
   ['c-mob', 'c-rt', 'c-ct'].forEach(id => { const el = $('#' + id); if (el) el.addEventListener('change', () => { SET.cal[{ 'c-mob': 'mobTime', 'c-rt': 'renfoTime', 'c-ct': 'cardioTime' }[id]] = el.value; saveSet(); }); });
