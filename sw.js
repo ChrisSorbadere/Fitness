@@ -1,5 +1,5 @@
 /* Fitness 57 — service worker v2.0 : réseau d'abord, cache en secours hors ligne */
-const CACHE = 'fitness57-v2.2';
+const CACHE = 'fitness57-v2.3';
 const ASSETS = ['./', './index.html', './style.css', './images.js', './data.js', './app.js', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

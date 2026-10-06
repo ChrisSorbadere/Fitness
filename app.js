@@ -1,4 +1,4 @@
-/* Fitness 57 — v2.2 — logique de l'application */
+/* Fitness 57 — v2.3 — logique de l'application */
 'use strict';
 
 /* =========================================================
@@ -29,11 +29,12 @@ const rand = a => a[Math.floor(Math.random() * a.length)];
    ========================================================= */
 const DEFAULT_SETTINGS = {
   name: '', start: '', theme: 'auto', size: 'normal', sound: true, vibrate: true,
-  remind: true, renfoPref: 'alterne', bonus: 0,
+  remind: true, renfoPref: 'alterne', bonus: 0, voice: true, tempo: {},
   cal: { on: false, mobTime: '08:30', renfoDays: [0, 2, 4], renfoTime: '18:00', cardioDays: [1, 3, 5], cardioTime: '10:00' }
 };
 let SET = Object.assign({}, DEFAULT_SETTINGS, store.get('settings', {}));
 SET.cal = Object.assign({}, DEFAULT_SETTINGS.cal, SET.cal || {});
+SET.tempo = SET.tempo || {};
 let LOG = store.get('log', {});
 const saveSet = () => store.set('settings', SET);
 const saveLog = () => store.set('log', LOG);
@@ -139,6 +140,13 @@ function beep(freq = 880, dur = 0.12, vol = 0.25) {
     const t = audioCtx.currentTime; g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
     o.start(t); o.stop(t + dur + 0.02);
   } catch {}
+}
+let frVoice = null;
+function pickVoice() { try { const vs = speechSynthesis.getVoices(); frVoice = vs.find(v => /^fr(-|_)FR/i.test(v.lang)) || vs.find(v => /^fr/i.test(v.lang)) || null; } catch {} }
+if ('speechSynthesis' in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function say(t, keep) {
+  if (!SET.voice || !('speechSynthesis' in window)) return;
+  try { if (!keep) speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'fr-FR'; u.rate = 1.05; if (frVoice) u.voice = frVoice; speechSynthesis.speak(u); } catch {}
 }
 const buzz = p => { if (SET.vibrate && navigator.vibrate) try { navigator.vibrate(p); } catch {} };
 let toastT;
@@ -400,22 +408,82 @@ function startSession(key) {
   PL = { key, steps: buildSteps(key), i: 0, t0: Date.now(), paused: false, remaining: 0, endAt: 0, finished: false };
   $('#player').hidden = false; document.body.style.overflow = 'hidden';
   keepAwake(true); enterStep(0);
-  clearInterval(plTick); plTick = setInterval(tickPlayer, 200);
+  clearInterval(plTick); plTick = setInterval(tickPlayer, 100);
 }
 function enterStep(i) {
   PL.i = i; const st = PL.steps[i];
   PL.paused = false; PL.half = false; PL.lastBeep = null;
   PL.remaining = st.secs; PL.endAt = st.secs ? Date.now() + st.secs * 1000 : 0;
   PL.breathIn = true; PL.breathAt = Date.now();
+  const e = st.id && EXERCISES[st.id];
+  PL.isReps = !!(e && e.type === 'reps');
+  if (PL.isReps) {
+    PL.rep = 0; PL.total = st.reps * (e.side ? 2 : 1); PL.repT = 0; PL.lastT = Date.now();
+    PL.graceUntil = Date.now() + 3500; PL.sideDone = false; PL.ending = false;
+  }
   buzz(st.kind === 'work' ? [60, 60, 60] : 40);
   beep(st.kind === 'work' ? 988 : 660, 0.15);
+  if (st.kind === 'rest') say(st.prep ? 'Repos. Prépare-toi.' : `Repos, ${st.secs} secondes`);
+  else if (PL.isReps) say(`${e.name}. ${st.reps} répétitions${e.side ? ' par côté' : ''}`);
+  else if (e) say(e.name);
   drawPlayer();
+}
+const tempoOf = id => SET.tempo[id] || EXERCISES[id].tempo || 3;
+function repTick() {
+  const st = PL.steps[PL.i], e = EXERCISES[st.id], now = Date.now();
+  const dt = now - PL.lastT; PL.lastT = now;
+  const cue = $('#p-cue');
+  if (PL.paused || PL.ending) return;
+  if (now < PL.graceUntil) {
+    const n = Math.ceil((PL.graceUntil - now) / 1000);
+    if (cue) cue.textContent = PL.sideDone && PL.rep > 0 ? `↔ Change de côté… ${n}` : `Prêt… départ dans ${n}`;
+    PL.repT = 0; drawReps(); return;
+  }
+  const T = tempoOf(st.id) * 1000;
+  PL.repT += dt;
+  if (PL.repT >= T) {
+    PL.repT -= T; PL.rep++;
+    countRep();
+  }
+  drawReps();
+}
+function countRep() {
+  const st = PL.steps[PL.i], e = EXERCISES[st.id];
+  if (PL.rep >= PL.total) {
+    PL.ending = true; PL.repT = 0; drawReps();
+    beep(1046, 0.3); buzz([80, 60, 80]); say('Bravo !');
+    const c = $('#p-cue'); if (c) c.textContent = 'Série terminée ✓';
+    setTimeout(() => { if (PL && PL.ending && PL.steps[PL.i] === st) nextStep(); }, 1100);
+    return;
+  }
+  const shown = e.side ? ((PL.rep - 1) % st.reps) + 1 : PL.rep;
+  beep(880, 0.07, 0.18); say(String(shown));
+  if (e.side && !PL.sideDone && PL.rep === st.reps) {
+    PL.sideDone = true; PL.graceUntil = Date.now() + 3500; PL.repT = 0;
+    beep(660, 0.25); buzz(200); setTimeout(() => say('Change de côté', true), 400);
+  }
+}
+function drawReps() {
+  const st = PL.steps[PL.i], e = EXERCISES[st.id];
+  const T = tempoOf(st.id) * 1000, frac = Math.min(1, PL.repT / T);
+  const n = $('#rep-n'); if (!n) return;
+  const sideRep = e.side ? (PL.rep > st.reps || PL.sideDone ? PL.rep - st.reps : PL.rep) : PL.rep;
+  n.textContent = Math.max(0, Math.min(st.reps, sideRep));
+  const side = $('#rep-side'); if (side && e.side) side.textContent = PL.sideDone ? 'Côté 2 sur 2' : 'Côté 1 sur 2';
+  document.querySelectorAll('#rep-bar i').forEach((seg, k) => {
+    const v = k < PL.rep ? 1 : k === PL.rep && !PL.ending && Date.now() >= PL.graceUntil ? frac : 0;
+    seg.firstChild.style.width = (v * 100) + '%';
+    seg.classList.toggle('done', k < PL.rep);
+  });
+  const f = $('#p-fig');
+  if (f) f.classList.toggle('flip', Date.now() >= PL.graceUntil && !PL.ending && frac >= 0.5);
 }
 function nextStep() { if (PL.i < PL.steps.length - 1) enterStep(PL.i + 1); else finishSession(); }
 function prevStep() { if (PL.i > 0) enterStep(PL.i - 1); }
 function tickPlayer() {
   if (!PL || PL.finished) return;
   const st = PL.steps[PL.i];
+  if (PL.isReps && st.kind === 'work') { repTick(); return; }
   if (!st.secs || PL.paused) return;
   const left = (PL.endAt - Date.now()) / 1000;
   const sec = Math.ceil(left);
@@ -432,7 +500,9 @@ function tickPlayer() {
   if (left <= 0) { beep(1046, 0.3); if (st.id && EXERCISES[st.id].type === 'free') { toast('Objectif atteint 🎯'); nextStep(); } else nextStep(); }
 }
 function togglePause() {
-  const st = PL.steps[PL.i]; if (!st.secs) return;
+  const st = PL.steps[PL.i];
+  if (PL.isReps && st.kind === 'work') { PL.paused = !PL.paused; PL.lastT = Date.now(); if (!PL.paused) PL.graceUntil = Date.now() + 1500; drawPlayer(); return; }
+  if (!st.secs) return;
   if (PL.paused) { PL.endAt = Date.now() + PL.remaining * 1000; PL.paused = false; }
   else { PL.remaining = Math.max(0, (PL.endAt - Date.now()) / 1000); PL.paused = true; }
   drawPlayer();
@@ -460,18 +530,24 @@ function drawPlayer() {
     const e = EXERCISES[st.id];
     const setTxt = st.sets > 1 ? `Série ${st.set}/${st.sets}` : (s.intervals ? 'Intervalle' : 'Exercice');
     let big;
-    if (e.type === 'reps') big = `<div class="p-big">${st.reps}<small>rép.${e.side ? ' / côté' : ''}</small></div>`;
+    if (e.type === 'reps') {
+      const segs = Array.from({ length: PL.total }, (_, k) => `<i class="${e.side && k === st.reps ? 'mid' : ''}"><b></b></i>`).join('');
+      big = `<div class="rep-count" data-act="rep-plus"><b id="rep-n">0</b><span>/ ${st.reps}</span></div>
+        ${e.side ? '<div class="tiny" id="rep-side">Côté 1 sur 2</div>' : ''}
+        <div class="rep-bar ${PL.total > 24 ? 'thin' : ''}" id="rep-bar">${segs}</div>
+        <div class="tempo-row"><button data-act="tempo" data-v="0.5">🐢 Plus lent</button><span>${String(tempoOf(st.id)).replace('.', ',')} s / rép.</span><button data-act="tempo" data-v="-0.5">Plus vite 🐇</button></div>`;
+    }
     else if (e.type === 'breathe') big = `<div class="breath" id="breath">${PL.breathIn ? 'Inspire' : 'Expire'}</div><div class="p-big" id="p-time" style="font-size:2rem;margin-top:10px">${fmtTime(st.secs)}</div>`;
     else big = `<div class="p-big" id="p-time">${fmtTime(PL.paused ? PL.remaining : (PL.endAt - Date.now()) / 1000)}</div>${e.side ? '<div class="tiny">moitié du temps par côté</div>' : ''}`;
     body = `<div class="p-kind">${setTxt}</div>
       <div class="p-name">${e.name}</div>
-      ${e.type !== 'breathe' ? `<div class="p-fig" id="p-fig"><div class="a">${fig(e.poses[0])}</div><div class="b">${fig(e.poses[1])}</div></div>` : ''}
+      ${e.type !== 'breathe' ? `<div class="p-fig ${e.type === 'reps' ? 'sm' : ''}" id="p-fig" ${e.type === 'reps' ? 'data-act="rep-plus"' : ''}><div class="a">${fig(e.poses[0])}</div><div class="b">${fig(e.poses[1])}</div></div>` : ''}
       ${big}
       <div class="p-cue" id="p-cue">${e.cues[0]}</div>`;
     if (e.type === 'reps') {
       ctrl = `<button class="btn round" data-act="pl-prev" aria-label="Précédent">⏮</button>
-        <button class="btn primary" data-act="pl-next">${st.set < st.sets ? 'Série terminée ✓' : 'Terminé ✓'}</button>
-        <button class="btn round" data-act="pl-info" aria-label="Aide">?</button>`;
+        <button class="btn ${PL.paused ? 'primary' : 'ghost'}" data-act="pl-pause">${PL.paused ? '▶ Reprendre' : '⏸ Pause'}</button>
+        <button class="btn round" data-act="pl-next" aria-label="Série terminée">⏭</button>`;
     } else {
       ctrl = `<button class="btn round" data-act="pl-prev" aria-label="Précédent">⏮</button>
         <button class="btn ${PL.paused ? 'primary' : 'ghost'}" data-act="pl-pause">${PL.paused ? '▶ Reprendre' : '⏸ Pause'}</button>
@@ -479,8 +555,8 @@ function drawPlayer() {
     }
     let ci = 0;
     poseTick = setInterval(() => {
-      const f = $('#p-fig'); if (f) f.classList.toggle('flip');
-      if (++ci % 3 === 0 && !PL.half) { const c = $('#p-cue'); if (c && e.cues.length > 1) c.textContent = e.cues[(ci / 3) % e.cues.length]; }
+      const f = $('#p-fig'); if (f && !PL.isReps) f.classList.toggle('flip');
+      if (++ci % 3 === 0 && !PL.half && !(PL.isReps && Date.now() < PL.graceUntil) && !PL.ending) { const c = $('#p-cue'); if (c && e.cues.length > 1) c.textContent = e.cues[(ci / 3) % e.cues.length]; }
     }, 1600);
   }
   if (st.kind === 'rest') { let f = 0; poseTick = setInterval(() => { const x = $('#p-fig'); if (x) x.classList.toggle('flip'); f++; }, 1600); }
@@ -490,6 +566,7 @@ function drawPlayer() {
     <div class="p-top"><button class="p-x" data-act="pl-quit" aria-label="Quitter">✕</button><div class="grow">${s.emoji} ${s.name}</div><span class="tiny">${pct}%</span></div>
     <div class="p-bar"><i style="width:${pct}%"></i></div>
     <div class="p-body">${body}</div>${nxt}<div class="p-ctrl">${ctrl}</div>`;
+  if (PL.isReps && st.kind === 'work') { drawReps(); const c = $('#p-cue'); if (c && PL.paused) c.textContent = '⏸ En pause'; }
   const br = $('#breath');
   if (br && PL.breathIn) { PL.breathAt = Date.now(); setTimeout(() => br.classList.add('in'), 60); }
 }
@@ -547,6 +624,7 @@ function saveSession() {
   render();
 }
 function closePlayer() {
+  try { speechSynthesis.cancel(); } catch {}
   clearInterval(plTick); clearInterval(poseTick); keepAwake(false);
   $('#player').hidden = true; $('#player').innerHTML = ''; document.body.style.overflow = ''; PL = null;
 }
@@ -722,6 +800,7 @@ function sheetSettings() {
     <div class="card" style="padding:4px 16px">
       ${sw('s-sound', SET.sound, 'Sons', 'Bips de décompte et de fin')}
       ${sw('s-vibrate', SET.vibrate, 'Vibrations')}
+      ${sw('s-voice', SET.voice, 'Comptage à voix haute', 'Annonce l’exercice et compte les répétitions')}
       <div class="field" style="margin:12px 0"><label>Séance de renfort proposée</label>${seg('s-pref', SET.renfoPref, [['alterne', 'Alterner'], ['renfo', 'Haltères'], ['maison', 'Chaise']])}</div>
       <div class="switch"><div><div class="lb">Niveau de répétitions</div><div class="tiny">Ajusté selon ton RPE : ${SET.bonus > 0 ? '+' : ''}${SET.bonus || 0} rép.</div></div>
         <span class="stepper"><button data-act="bonus" data-v="-1">−</button><button data-act="bonus" data-v="1">+</button></span></div>
@@ -753,7 +832,7 @@ function sheetSettings() {
         <button class="btn ghost block" style="color:var(--red)" data-act="reset">Tout effacer</button>
       </div>
     </div>
-    <p class="tiny" style="text-align:center;margin-top:16px">Fitness 57 · v2.2 · conseils généraux, pas un avis médical</p>`, true);
+    <p class="tiny" style="text-align:center;margin-top:16px">Fitness 57 · v2.3 · conseils généraux, pas un avis médical</p>`, true);
   $('#s-name').addEventListener('change', e => { SET.name = e.target.value.trim(); saveSet(); render(); });
   $('#s-start').addEventListener('change', e => { if (e.target.value) { SET.start = e.target.value; saveSet(); render(); } });
   ['c-mob', 'c-rt', 'c-ct'].forEach(id => { const el = $('#' + id); if (el) el.addEventListener('change', () => { SET.cal[{ 'c-mob': 'mobTime', 'c-rt': 'renfoTime', 'c-ct': 'cardioTime' }[id]] = el.value; saveSet(); }); });
@@ -888,6 +967,8 @@ const ACT = {
 
   'pl-next': () => { const st = PL.steps[PL.i]; if (st.kind === 'work' && st.id && EXERCISES[st.id].type === 'free' && PL.endAt - Date.now() > 0 && !confirm('Terminer la marche maintenant ?')) return; nextStep(); },
   'pl-prev': () => prevStep(),
+  'rep-plus': () => { if (!PL || !PL.isReps || PL.ending || PL.paused) return; PL.graceUntil = 0; PL.repT = 0; PL.rep++; countRep(); drawReps(); },
+  tempo: t => { const st = PL.steps[PL.i]; const v = Math.max(1.5, Math.min(8, tempoOf(st.id) + Number(t.dataset.v))); SET.tempo[st.id] = v; saveSet(); const sp = t.parentNode.querySelector('span'); if (sp) sp.textContent = String(v).replace('.', ',') + ' s / rép.'; },
   'pl-pause': () => togglePause(),
   'pl-add': () => addRest(15),
   'pl-info': () => { const st = PL.steps[PL.i]; if (st.id) { const e = EXERCISES[st.id]; alert(`${e.name}\n\n${e.how}${e.warn ? '\n\n⚠️ ' + e.warn : ''}`); } },
@@ -913,6 +994,7 @@ const SWITCH = {
   's-sound': v => { SET.sound = v; if (v) { ensureAudio(); beep(); } },
   's-vibrate': v => { SET.vibrate = v; buzz(80); },
   's-remind': v => { SET.remind = v; },
+  's-voice': v => { SET.voice = v; if (v) say('Comptage activé'); else try { speechSynthesis.cancel(); } catch {} },
   's-cal': v => { SET.cal.on = v; }
 };
 
